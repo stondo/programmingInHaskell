@@ -23,12 +23,12 @@ seqn (act:acts) = do x <- act
 
 -- Exercises
 
--- 3
+-- 3.
 prod :: Num a => [a] -> a
 prod [] = 1
 prod (n:ns) = n * prod ns
 
--- 4
+-- 4.
 qsortReversed :: Ord a => [a] -> [a]
 qsortReversed [] = []
 qsortReversed (x:xs) = qsortReversed larger ++ [x] ++ qsortReversed smaller
@@ -36,7 +36,7 @@ qsortReversed (x:xs) = qsortReversed larger ++ [x] ++ qsortReversed smaller
                    smaller = [a | a <- xs, a < x]
                    larger = [b | b <- xs, b >= x]
 
--- 5
+-- 5.
 qsortWithoutDuplicates :: Ord a => [a] -> [a]
 qsortWithoutDuplicates [] = []
 qsortWithoutDuplicates (x:xs) = qsortWithoutDuplicates smaller ++ [x] ++ qsortWithoutDuplicates larger

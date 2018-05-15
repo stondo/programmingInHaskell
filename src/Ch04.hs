@@ -44,6 +44,7 @@ sum = foldl (+) 0
 halve :: [a] -> ([a], [a])
 halve xs = (take((length xs) `div` 2)(xs), drop((length xs) `div` 2)(xs))
 
+-- 2.
 third :: [a] -> a
 third xs = xs !! (3 - 1)
 
@@ -53,3 +54,17 @@ third' xs = head (tail (tail xs))
 third'' :: [Int] -> Int
 third'' (_ : _ : x : _)     = x
 third'' _          = -1
+
+-- 3.
+safetail :: [a] -> [a]
+safetail (x : xs) = if null xs then [] else xs
+safetail _ = []
+
+safetail' :: [a] -> [a]
+safetail' xs = if length xs == 1 || length xs == 0 then [] else tail xs
+
+safetail'' :: [a] -> [a]
+safetail'' xs | null xs    = []
+              | otherwise  = tail xs
+
+-- 4.
