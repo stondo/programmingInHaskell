@@ -67,4 +67,19 @@ safetail'' :: [a] -> [a]
 safetail'' xs | null xs    = []
               | otherwise  = tail xs
 
--- 4.
+-- 5.
+--let res1 =  if (a) then if (b) then true else false else false
+
+-- 6.
+--let res2 = if (b) then b else false
+
+-- 7.
+mult :: Int -> (Int -> (Int -> Int))
+mult = \x -> (\y -> (\z -> x * y * z))
+
+--mult' :: Int -> Int -> Int -> Int
+--mult' x y z = x * y * z
+
+-- 8.
+luhnDouble :: Int -> Int
+luhnDouble n = if (n * 2) > 9 then n * 2 - 9 else n * 2
