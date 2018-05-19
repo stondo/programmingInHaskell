@@ -16,6 +16,12 @@ signum :: Int -> Int
 signum n = if n < 0 then -1 else
               if n == 0 then 0 else 1
 
+fst :: (a, b) -> a
+fst (a, _) = a
+
+snd :: (a, b) -> b
+snd (_, b) = b
+
 abs' :: Int -> Int
 abs' n | n >= 0    =  n
        | otherwise = -n
@@ -82,4 +88,11 @@ mult = \x -> (\y -> (\z -> x * y * z))
 
 -- 8.
 luhnDouble :: Int -> Int
-luhnDouble n = if (n * 2) > 9 then n * 2 - 9 else n * 2
+luhnDouble n | n * 2 <= 9 = n * 2
+             | otherwise  = n * 2 - 9
+
+luhnDouble' :: Int -> Int
+luhnDouble' n = if (n * 2) > 9 then n * 2 - 9 else n * 2
+
+luhn :: Int -> Int -> Int -> Int -> Bool
+luhn a b c d = (d + luhnDouble c + b + luhnDouble a) `mod` 10 == 0
