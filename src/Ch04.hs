@@ -48,7 +48,7 @@ sum = foldl (+) 0
 
 -- 1.
 halve :: [a] -> ([a], [a])
-halve xs = (take((length xs) `div` 2)(xs), drop((length xs) `div` 2)(xs))
+halve xs = (take(length xs `div` 2) xs, drop(length xs `div` 2) xs)
 
 -- 2.
 third :: [a] -> a

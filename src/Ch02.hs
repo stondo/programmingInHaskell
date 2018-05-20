@@ -1,7 +1,13 @@
-module Ch02 where
+module Ch02
+  ( quadruple
+  , factorial
+  , average
+  , last'
+  , init'
+  , init''
+  ) where
 
-double :: Int -> Int
-double x = x + x
+import Ch01
 
 quadruple :: Int -> Int
 quadruple x = double (double x)

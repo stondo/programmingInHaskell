@@ -1,4 +1,9 @@
-module Ch03 where
+module Ch03
+  ( add
+  , zeroto
+  , add'
+  , mult
+  ) where
 
 -- Functions
 add :: (Int, Int) -> Int

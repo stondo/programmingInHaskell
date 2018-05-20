@@ -1,4 +1,12 @@
-module Ch01 where
+module Ch01
+ ( double
+ , recSum
+ , qsort
+ , prod
+ , qsortReversed
+ , qsortWithoutDuplicates
+ , qsortWithoutDuplicatesReversed
+ ) where
 
 double :: Int -> Int
 double x = x + x
@@ -14,12 +22,12 @@ qsort (x:xs) = qsort smaller ++ [x] ++ qsort larger
                    smaller = [a | a <- xs, a <= x]
                    larger = [b | b <- xs, b > x]
 
---seqn :: [IO a] -> IO [a]
-seqn :: Monad m => [m a] -> m [a]
-seqn [] = return []
-seqn (act:acts) = do x <- act
-                     xs <- seqn acts
-                     return (x:xs)
+-- seqn :: [IO a] -> IO [a]
+-- seqn :: Monad m => [m a] -> m [a]
+-- seqn [] = return []
+-- seqn (act:acts) = do x <- act
+--                      xs <- seqn acts
+--                      return (x:xs)
 
 -- Exercises
 
