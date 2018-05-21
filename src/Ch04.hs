@@ -1,38 +1,63 @@
-module Ch04 where
+module Ch04
+  ( even'
+  , splitAt'
+  , recip'
+  , abs'
+  , signum'
+  , fst'
+  , snd'
+  , abs''
+  , signum''
+  , addLambda
+  , odds
+  , odds'
+  , sumFoldl
+  , halve
+  , third
+  , third'
+  , third''
+  , safetail
+  , safetail'
+  , safetail''
+  , multLambda
+  , luhnDouble
+  , luhnDouble'
+  , luhn
+  ) where
 
-even :: Integral a => a -> Bool
-even n = n `mod` 2 == 0
+even' :: Integral a => a -> Bool
+even' n = n `mod` 2 == 0
 
-splitAt :: Int -> [a] -> ([a], [a])
-splitAt n ns = (take n ns, drop n ns)
+splitAt' :: Int -> [a] -> ([a], [a])
+splitAt' n ns = (take n ns, drop n ns)
 
-recip :: Fractional a => a -> a
-recip n = 1/n
-
-abs :: Int -> Int
-abs x = if x >= 0 then x else -x
-
-signum :: Int -> Int
-signum n = if n < 0 then -1 else
-              if n == 0 then 0 else 1
-
-fst :: (a, b) -> a
-fst (a, _) = a
-
-snd :: (a, b) -> b
-snd (_, b) = b
+recip' :: Fractional a => a -> a
+recip' n = 1/n
 
 abs' :: Int -> Int
-abs' n | n >= 0    =  n
-       | otherwise = -n
+abs' x = if x >= 0 then x else -x
 
 signum' :: Int -> Int
-signum' n | n < 0     = -1
+signum' n = if n < 0 then -1 else
+              if n == 0 then 0 else 1
+
+fst' :: (a, b) -> a
+fst' (a, _) = a
+
+snd' :: (a, b) -> b
+snd' (_, b) = b
+
+abs'' :: Int -> Int
+abs'' n | n >= 0    =  n
+       | otherwise = -n
+
+signum'' :: Int -> Int
+signum'' n | n < 0     = -1
           | n == 0    = 0
           | otherwise = 1
 
-add :: Int -> (Int -> Int)
-add = \x -> (\y -> x + y)
+addLambda :: Int -> (Int -> Int)
+addLambda = \x -> (\y -> x + y)
 
 odds :: Int -> [Int]
 odds n = map f [0..n-1]
@@ -41,8 +66,8 @@ odds n = map f [0..n-1]
 odds' :: Int -> [Int]
 odds' n = map (\x -> x * 2 + 1) [0..n-1]
 
-sum :: [Int] -> Int
-sum = foldl (+) 0
+sumFoldl :: [Int] -> Int
+sumFoldl = foldl (+) 0
 
 -- Exercises
 
@@ -73,15 +98,9 @@ safetail'' :: [a] -> [a]
 safetail'' xs | null xs    = []
               | otherwise  = tail xs
 
--- 5.
---let res1 =  if (a) then if (b) then true else false else false
-
--- 6.
---let res2 = if (b) then b else false
-
 -- 7.
-mult :: Int -> (Int -> (Int -> Int))
-mult = \x -> (\y -> (\z -> x * y * z))
+multLambda :: Int -> (Int -> (Int -> Int))
+multLambda = \x -> (\y -> (\z -> x * y * z))
 
 --mult' :: Int -> Int -> Int -> Int
 --mult' x y z = x * y * z
