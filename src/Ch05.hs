@@ -1,7 +1,15 @@
-module Ch05 where
+module Ch05
+  ( concat'
+  , firsts
+  , length'
+  , factors
+  , prime
+  , primes
+  , find
+  ) where
 
-concat :: [[a]] -> [a]
-concat xss = [x | xs <- xss, x <- xs]
+concat' :: [[a]] -> [a]
+concat' xss = [x | xs <- xss, x <- xs]
 
 firsts :: [(a,b)] -> [a]
 firsts xs = [x | (x, _) <- xs]
