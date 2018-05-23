@@ -6,6 +6,8 @@ module Ch05
   , prime
   , primes
   , find
+  , pairs
+  , sorted
   ) where
 
 concat' :: [[a]] -> [a]
@@ -28,3 +30,9 @@ primes n = [x | x <- [1..n], prime x]
 
 find :: Eq a => a -> [(a, b)] -> [b]
 find k t = [v | (k', v) <- t, k == k']
+
+pairs :: [a] -> [(a, a)]
+pairs xs = xs `zip` tail xs
+
+sorted :: Ord a => [a] -> Bool
+sorted xs = and [x <= y | (x,y) <- pairs xs]
