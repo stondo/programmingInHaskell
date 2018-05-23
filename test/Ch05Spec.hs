@@ -36,3 +36,20 @@ spec =
     describe "find" $ do
       it "returns a list of all values associated with a given key in a table" $ do
         show (find 'a' [('a', 2),('c', 88),('a', -4)]) `shouldBe` "[2,-4]"
+
+    describe "zip" $ do
+      it "pairs successive elements frmo two existing lists" $ do
+        show (['a', 'b', 'c'] `zip` [1,2,3,4]) `shouldBe` "[('a',1),('b',2),('c',3)]"
+
+    describe "pairs" $ do
+      it "returns the list of all pairs of adjacent elements from a list" $ do
+        show (pairs [1,2,3,4]) `shouldBe` "[(1,2),(2,3),(3,4)]"
+
+    describe "sorted" $ do
+      it "decides if a list of elements of any ordered type is sorted" $ do
+        show (sorted [1,2,3,4]) `shouldBe` "True"
+
+
+--    describe "" $ do
+--      it "" $ do
+--        show () `shouldBe` ""
