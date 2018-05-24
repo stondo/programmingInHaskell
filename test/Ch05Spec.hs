@@ -49,6 +49,38 @@ spec =
       it "decides if a list of elements of any ordered type is sorted" $ do
         show (sorted [1,2,3,4]) `shouldBe` "True"
 
+    describe "positions" $ do
+      it "selects position at which given value occurs" $ do
+        show (positions True [True, False, True, False]) `shouldBe` "[0,2]"
+
+    describe "lowers" $ do
+      it "returns the number of lower case letter in the given string" $ do
+        show (lowers "Haskell") `shouldBe` "6"
+
+    describe "count" $ do
+      it "counts the occurrences of the given letter in the given string" $ do
+        show (count 'l' "Haskell") `shouldBe` "2"
+
+    describe "let2int" $ do
+      it "converts a lower-case letter into the corresponding integer" $ do
+        show (let2int 'a') `shouldBe` "0"
+
+    describe "int2let" $ do
+      it "converts an integer into the corresponding letter " $ do
+        show (int2let 0) `shouldBe` "'a'"
+
+    describe "shift" $ do
+      it "shifts a lower-case letter of the right/left number of characters" $ do
+        show (shift 3 'z') `shouldBe` "'c'"
+
+    describe "encode" $ do
+      it "encodes a string using a given shift factor" $ do
+        show (encode 3 "haskell is fun") `shouldBe` "\"kdvnhoo lv ixq\""
+
+    describe "encode" $ do
+      it "decodes a string using an opposite shift factor" $ do
+        show (encode (-3) "kdvnhoo lv ixq") `shouldBe` "\"haskell is fun\""
+
 
 --    describe "" $ do
 --      it "" $ do
