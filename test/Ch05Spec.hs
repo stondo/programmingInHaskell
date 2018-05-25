@@ -81,6 +81,17 @@ spec =
       it "decodes a string using an opposite shift factor" $ do
         show (encode (-3) "kdvnhoo lv ixq") `shouldBe` "\"haskell is fun\""
 
+    describe "percent" $ do
+      it "calculates the percentage of one integer with respect to another" $ do
+        show (percent 5 15) `shouldBe` "33.333336"
+
+    describe "freqs" $ do
+      it "returns a frequency table for any given string" $ do
+        show (freqs "haskell") `shouldBe` "[14.285715,0.0,0.0,0.0,14.285715,0.0,0.0,14.285715,0.0,0.0,14.285715,28.57143,0.0,0.0,0.0,0.0,0.0,0.0,14.285715,0.0,0.0,0.0,0.0,0.0,0.0,0.0]"
+
+    describe "rotate" $ do
+      it "rotates the elements of a list n places to the left" $ do
+        show (rotate 3 [1..5]) `shouldBe` "[4,5,1,2,3]"
 
 --    describe "" $ do
 --      it "" $ do
