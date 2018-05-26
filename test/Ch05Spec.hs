@@ -93,6 +93,47 @@ spec =
       it "rotates the elements of a list n places to the left" $ do
         show (rotate 3 [1..5]) `shouldBe` "[4,5,1,2,3]"
 
+    describe "crack" $ do
+      it "cracks the Cesar cipher" $ do
+        show (crack "kdvnhoo lv ixq") `shouldBe` "\"haskell is fun\""
+
+    describe "sumSqrd" $ do
+      it "calculates the sum of the square untill the given integer" $ do
+        show (sumSqrd 100) `shouldBe` "338350"
+
+    describe "grid" $ do
+      it "returns a coordinate grid of the given size" $ do
+        show (grid 1 2) `shouldBe` "[(0,0),(0,1),(0,2),(1,0),(1,1),(1,2)]"
+
+    describe "square" $ do
+      it "returns a coordinate square of size n, excluding the diagonal from (0,0) to (n:n)" $ do
+        show (square 2) `shouldBe` "[(0,1),(0,2),(1,0),(1,2),(2,0),(2,1)]"
+
+    describe "replicate'" $ do
+      it "show how to define replicate :: Int -> a -> [a] using list comprehnsion" $ do
+        show (replicate' 3 True) `shouldBe` "[True,True,True]"
+
+    describe "pyths" $ do
+      it "returns the list of all triples such that x^2 + y^2 == z^2" $ do
+        show (pyths 10) `shouldBe` "[(3,4,5),(4,3,5),(6,8,10),(8,6,10)]"
+
+    describe "perfects" $ do
+      it "returns the list of all perfect numbers up to a given limit" $ do
+        show (perfects 500) `shouldBe` "[6,28,496]"
+-- 7.
+    describe "[(x,y') | x <- [1,2], y' <- [y | y <- [3,4]]] (concat[ [(x,y) | y <- [3,4]] | x <- [1,2]])" $ do
+      it "write the above list comp. using 2 nested list comp." $ do
+        [(x,y') | x <- [1,2], y' <- [y | y <- [3,4]]] `shouldBe` concat[ [(x,y) | y <- [3,4]] | x <- [1,2]]
+
+    describe "positions'" $ do
+      it "selects position at which given value occurs" $ do
+        show (positions' False [True, False, True, False]) `shouldBe` "[1,3]"
+
+    describe "scalarproduct" $ do
+      it "calculates the scalarproduct of two lists" $ do
+        show (scalarproduct [1,2,3] [4,5,6]) `shouldBe` "32"
+
+
 --    describe "" $ do
 --      it "" $ do
 --        show () `shouldBe` ""
