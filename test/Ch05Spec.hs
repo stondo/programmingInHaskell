@@ -74,8 +74,12 @@ spec =
         show (shift 3 'z') `shouldBe` "'c'"
 
     describe "encode" $ do
-      it "encodes a string using a given shift factor" $ do
+      it "encodes a string using a given shift factor (input string is lowercase)" $ do
         show (encode 3 "haskell is fun") `shouldBe` "\"kdvnhoo lv ixq\""
+
+    describe "encode" $ do
+      it "encodes a string using a given shift factor (input string has lower case, upper case letters and special characters)" $ do
+        show (encode 3 "Haskell is FUN!") `shouldBe` "\"Kdvnhoo lv IXQ!\""
 
     describe "encode" $ do
       it "decodes a string using an opposite shift factor" $ do

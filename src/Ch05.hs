@@ -68,25 +68,35 @@ lowers :: String -> Int
 lowers xs = length' [x | x <- xs, x >= 'a' && x <= 'z']
 
 count :: Char -> String -> Int
-count x xs = length' [x | x' <- xs, x == x']
+count x xs = length' [x | x' <- xs, x == toLower x']
 
 -- The Cesar cipher
 
+-- Cesar Cipher working on lower letters only
 --let2int :: Char -> Int
 --let2int c = ord c - ord 'a'
-let2int :: Char -> Int
-let2int c = if (isLower c) then ord c - ord 'a' else ord c - ord 'A'
 
+-- Cesar Cipher working on both lower and upper letters
+let2int :: Char -> Int
+let2int c = if (isLower c) then ord c - ord 'a' else ord c - ord 'a' + 32
+
+-- Cesar Cipher working on lower letters only
 --int2let :: Int -> Char
 --int2let n = chr (ord 'a' + n)
-int2let :: Int -> Char
-int2let n = chr (ord 'a' + n)
 
+-- Cesar Cipher working on both lower and upper letters
+int2let :: Int -> Char
+int2let n = if (n >= 97 || n <= 122) then chr (ord 'a' + n) else chr (ord 'A' + n)
+
+-- Cesar Cipher working on lower letters only
 --shift :: Int -> Char -> Char
 --shift n c | isLower c = int2let ((let2int c + n) `mod` 26)
 --          | otherwise = c
+
+-- Cesar Cipher working on both lower and upper letters
 shift :: Int -> Char -> Char
 shift n c | isLower c = int2let ((let2int c + n) `mod` 26)
+          | isUpper c = int2let ((let2int c + n) `mod` 26 - 32)
           | otherwise = c
 
 encode :: Int -> String -> String
@@ -100,15 +110,19 @@ table = [8.1, 1.5, 2.8, 4.2, 12.7, 2.2, 2.0, 6.1, 7.0,
 percent :: Int -> Int -> Float
 percent n m = (fromIntegral n / fromIntegral m) * 100
 
+-- Cesar Cipher working on lower letters only
 --freqs :: String -> [Float]
 --freqs xs = [percent (count x xs) n | x <- ['a'..'z']]
 --           where n = lowers xs
+-- (l,u) <- [(c, chr (ord c - 32)) | c <- ['a'..'z']]
+
+-- Cesar Cipher working on both lower and upper letters
 freqs :: String -> [Float]
-freqs xs = [percent (count x xs) n | x <- ['a'..'z'] ++ ['A'..'Z']]
+freqs xs = [percent (count x xs) n | x <- ['a'..'z']]
            where n = length xs
 
 freqsChar :: String -> [(Char, Float)]
-freqsChar xs = [(x, percent (count x xs) n) | x <- xs]
+freqsChar xs = [(x, percent (count x xs) n) | x <- ['a'..'z']]
            where n = lowers xs
 
 chisqr :: [Float] -> [Float] -> Float
