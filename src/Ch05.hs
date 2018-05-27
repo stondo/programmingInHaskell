@@ -67,6 +67,11 @@ positions x xs = [i | (c,i) <- xs `zip` [0..], c == x]
 lowers :: String -> Int
 lowers xs = length' [x | x <- xs, x >= 'a' && x <= 'z']
 
+-- Cesar Cipher working on lower letters only
+--count :: Char -> String -> Int
+--count x xs = length' [x | x' <- xs, x == x']
+
+-- Cesar Cipher working on both lower and upper letters
 count :: Char -> String -> Int
 count x xs = length' [x | x' <- xs, x == toLower x']
 
