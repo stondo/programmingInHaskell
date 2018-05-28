@@ -5,6 +5,7 @@ module Ch06
   , fib
   , evens
   , odds
+  , fac'
   ) where
 
 fac :: Int -> Int
@@ -33,3 +34,10 @@ evens (x:xs) = x : odds xs
 odds :: [a] -> [a]
 odds []     = []
 odds (_:xs) = evens xs
+
+-- Exercises
+
+-- 1.
+fac' :: Int -> Int
+fac' 0 = 1
+fac' n | n >= 0 = n * fac (n - 1)

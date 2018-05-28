@@ -33,6 +33,10 @@ spec =
       it "selects the odd elements from a list" $ do
         show (odds ['a', 'b', 'c', 'd', 'e']) `shouldBe` "\"bd\""
 
+    describe "fac'" $ do
+      it "calculates the factorial of the given integer using a recursive function" $ do
+        show (fac' 5) `shouldBe` "120"
+
 --    describe "" $ do
 --      it "" $ do
 --        show () `shouldBe` ""
