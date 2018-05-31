@@ -37,6 +37,27 @@ spec =
       it "calculates the factorial of the given integer using a recursive function" $ do
         show (fac' 5) `shouldBe` "120"
 
+    describe "sumdown" $ do
+      it "returns the sum of the non-negative integers from a given value" $ do
+        show (sumdown 3) `shouldBe` "6"
+
+    describe "powNonNegative" $ do
+      it "exponentiation defined using recursion and the multiplication (*) operator 2^3" $ do
+        show (powNonNegative 2 3) `shouldBe` "8"
+
+    describe "powNonNegative" $ do
+      it "exponentiation defined using recursion and the multiplication (*) operator 0^0" $ do
+        show (powNonNegative 0 0) `shouldBe` "0"
+
+    describe "powNonNegative" $ do
+      it "exponentiation defined using recursion and the multiplication (*) operator 2^0" $ do
+        show (powNonNegative 2 0) `shouldBe` "1"
+
+    describe "euclid" $ do
+      it "returns Greates Common Divisor" $ do
+        show (euclid 6 27) `shouldBe` "3"
+
+
 --    describe "" $ do
 --      it "" $ do
 --        show () `shouldBe` ""

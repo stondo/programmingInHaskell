@@ -6,6 +6,9 @@ module Ch06
   , evens
   , odds
   , fac'
+  , sumdown
+  , powNonNegative
+  , euclid
   ) where
 
 fac :: Int -> Int
@@ -41,3 +44,20 @@ odds (_:xs) = evens xs
 fac' :: Int -> Int
 fac' 0 = 1
 fac' n | n >= 0 = n * fac (n - 1)
+
+-- 2.
+sumdown :: Int -> Int
+sumdown 0 = 0
+sumdown n = n + sumdown (n - 1)
+
+-- 3.
+powNonNegative :: Int -> Int -> Int
+powNonNegative 0 n | n >= 0         = 0
+powNonNegative n 0 | n > 0          = 1
+powNonNegative n m | n > 0 && m >= 0 = n * (^) n (m - 1)
+
+-- 4.
+euclid :: Int -> Int -> Int
+euclid n m | n == m    = n
+euclid n m | n > m     = euclid m (n - m)
+euclid n m | n < m     = euclid n (m - n)
