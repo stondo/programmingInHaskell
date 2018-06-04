@@ -57,6 +57,29 @@ spec =
       it "returns Greates Common Divisor" $ do
         show (euclid 6 27) `shouldBe` "3"
 
+    describe "and'" $ do
+      it "decides if all logical values in a list are True" $ do
+        show (and' [True,False,True,True]) `shouldBe` "False"
+
+    describe "concat'" $ do
+      it "concatenates a list of list" $ do
+        show (concat' [[0,5],[1,3]]) `shouldBe` "[0,5,1,3]"
+
+    describe "replicate'" $ do
+      it "replicates n times the given value" $ do
+        show (replicate' 3 True) `shouldBe` "[True,True,True]"
+
+    describe "selNth" $ do
+      it "selects the nth element of a list" $ do
+        show (selNth [0,1,2,9] 3) `shouldBe` "9"
+
+    describe "elem'" $ do
+      it "decides if a value is an element of a list" $ do
+        show (elem' 9 [1,9,2,0]) `shouldBe` "True"
+
+    describe "merge" $ do
+      it "merges two sorted lists" $ do
+        show (merge [2,5,6] [1,3,4]) `shouldBe` "[1,2,3,4,5,6]"
 
 --    describe "" $ do
 --      it "" $ do

@@ -137,7 +137,6 @@ spec =
       it "calculates the scalarproduct of two lists" $ do
         show (scalarproduct [1,2,3] [4,5,6]) `shouldBe` "32"
 
-
 --    describe "" $ do
 --      it "" $ do
 --        show () `shouldBe` ""
