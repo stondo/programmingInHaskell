@@ -96,11 +96,13 @@ elem' e (x:xs) | x == e = True
 merge :: Ord a => [a] -> [a] -> [a]
 merge xs [] = xs
 merge [] ys = ys
-merge (x:xs) (y:ys) | x <= y && not (null ys) && y <= minimum ys                 = x : y : merge xs ys
-                    | x <= y && not (null ys) && y >  minimum ys                 = merge (x:xs) (ys ++ [y])
-                    | x > y                  = merge (y:xs) (x:ys)
+merge (x:xs) (y:ys) | x <= y && y <= minimum ys = x : y : merge xs ys
+                    | x <= y && y >= maximum ys = merge (x:xs) (ys ++ [y])
+                    | x > y && x <= minimum ys  = y : x : merge xs ys
+                    | x > y && x >= maximum ys  = merge (y:xs) ys ++ [x]
+                    | x > y && x >= minimum ys  = merge (y:xs) (x:ys)
                     -- | x > y && not (null ys) && x >= (maximum ys) = y : merge xs ys ++ [x]
                     -- | x > y && not (null ys) && x < (maximum ys) = merge (y:xs) (x:ys)
-                    | otherwise              = y : x : merge xs ys
+                    -- | otherwise              = y : x : merge xs ys
 
 
