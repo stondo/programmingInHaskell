@@ -15,6 +15,8 @@ module Ch06
   , selNth
   , elem'
   , merge
+  , halve
+  , msort
   ) where
 
 fac :: Int -> Int
@@ -96,13 +98,16 @@ elem' e (x:xs) | x == e = True
 merge :: Ord a => [a] -> [a] -> [a]
 merge xs [] = xs
 merge [] ys = ys
-merge (x:xs) (y:ys) | x <= y && y <= minimum ys = x : y : merge xs ys
-                    | x <= y && y >= maximum ys = merge (x:xs) (ys ++ [y])
-                    | x > y && x <= minimum ys  = y : x : merge xs ys
-                    | x > y && x >= maximum ys  = merge (y:xs) ys ++ [x]
-                    | x > y && x >= minimum ys  = merge (y:xs) (x:ys)
-                    -- | x > y && not (null ys) && x >= (maximum ys) = y : merge xs ys ++ [x]
-                    -- | x > y && not (null ys) && x < (maximum ys) = merge (y:xs) (x:ys)
-                    -- | otherwise              = y : x : merge xs ys
+merge (x:xs) (y:ys) | x <= y    = x : merge xs (y:ys)
+                    | otherwise = y : merge (x:xs) ys
+-- 8.
+halve :: [a] -> ([a],[a])
+halve xs = (take ((length xs) `div` 2) xs, drop ((length xs) `div` 2) xs)
+
+msort :: Ord a => [a] -> [a]
+msort []  = []
+msort [x] = [x]
+msort xs  = merge (isort a) (isort b)
+  where (a,b) = halve xs
 
 

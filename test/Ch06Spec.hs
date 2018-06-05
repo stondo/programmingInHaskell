@@ -81,6 +81,13 @@ spec =
       it "merges two sorted lists" $ do
         show (merge [2,5,6] [1,3,4]) `shouldBe` "[1,2,3,4,5,6]"
 
+    describe "msort" $ do
+      it "merge sort using isort, halve and merge functions" $ do
+        show (msort [9,10,1,2,7,6,5,8]) `shouldBe` "[1,2,5,6,7,8,9,10]"
+
+
 --    describe "" $ do
 --      it "" $ do
 --        show () `shouldBe` ""
+
+
