@@ -17,6 +17,9 @@ module Ch06
   , merge
   , halve
   , msort
+  , sumList
+  , takeRec
+  , lastRec
   ) where
 
 fac :: Int -> Int
@@ -110,4 +113,21 @@ msort [x] = [x]
 msort xs  = merge (isort a) (isort b)
   where (a,b) = halve xs
 
+-- 9.
 
+-- a.
+sumList :: Num a => [a] -> a
+sumList []     = 0
+sumList [x]    = x
+sumList (x:xs) = x + sumList xs
+
+-- b.
+takeRec :: Int -> [a] -> [a]
+takeRec _ []     = []
+takeRec n (x:xs) | n > 0 && n >= length (x:xs) = x:xs
+                 | n > 0 && n < length (x:xs) = x : takeRec (n - 1) xs
+                 | otherwise                   = []
+
+lastRec :: [a] -> a
+lastRec (x:xs) | null xs   = x
+               | otherwise = last xs

@@ -85,6 +85,17 @@ spec =
       it "merge sort using isort, halve and merge functions" $ do
         show (msort [9,10,1,2,7,6,5,8]) `shouldBe` "[1,2,5,6,7,8,9,10]"
 
+    describe "sumList" $ do
+      it "sums the numbers in a list" $ do
+        show (sumList [0..10]) `shouldBe` "55"
+
+    describe "takeRec" $ do
+      it "takes n element from a list" $ do
+        show (takeRec 3 [1..5]) `shouldBe` "[1,2,3]"
+
+    describe "lastRec" $ do
+      it "returns the last element of a non-empty list" $ do
+        show (lastRec [1..9]) `shouldBe` "9"
 
 --    describe "" $ do
 --      it "" $ do
