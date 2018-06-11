@@ -25,13 +25,13 @@ spec =
       it "calculates the nth Fibonacci number for any integer n >= 0 using double recursion" $ do
         show (fib 7) `shouldBe` "13"
 
-    describe "evens" $ do
+    describe "evensPos" $ do
       it "selects the even elements from a list" $ do
-        show (evens ['a', 'b', 'c', 'd', 'e']) `shouldBe` "\"ace\""
+        show (evensPos ['a', 'b', 'c', 'd', 'e']) `shouldBe` "\"ace\""
 
-    describe "odds" $ do
+    describe "oddsPos" $ do
       it "selects the odd elements from a list" $ do
-        show (odds ['a', 'b', 'c', 'd', 'e']) `shouldBe` "\"bd\""
+        show (oddsPos ['a', 'b', 'c', 'd', 'e']) `shouldBe` "\"bd\""
 
     describe "fac'" $ do
       it "calculates the factorial of the given integer using a recursive function" $ do

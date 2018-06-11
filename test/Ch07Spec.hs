@@ -73,6 +73,27 @@ spec =
       it "is the last element in the result list" $ do
         winner votes `shouldBe` "Blue"
 
+    describe "rmempty" $ do
+      it "removes empty lists in a list of lists" $ do
+        rmempty [[],[1,2,3],[],[],[],[1..10]] `shouldBe` [[1,2,3],[1,2,3,4,5,6,7,8,9,10]]
+
+    describe "elim" $ do
+      it "removes the given element from all of the lists in the list" $ do
+        elim "Red" ballots `shouldBe` [["Green"],["Blue"],["Green","Blue"],["Blue","Gren"],["Green"]]
+
+    describe "rank" $ do
+      it "ranks the 1st-cjoice candidates in each ballot in increasing order of the number of such votes that were received" $ do
+        rank ballots `shouldBe` ["Red","Blue","Green"]
+
+    describe "winner'" $ do
+      it "recursive function that implements the alternative vote algorithm" $ do
+        winner' ballots `shouldBe` "Green"
+
+    describe "Show how the list comprehension [f x | x <- xs, p x] can be re-expressed using higher-order functions map and filter" $ do
+      it "are indeed equal" $ do
+        [(+1) x | x <- [0..10], even x] `shouldBe` map (+1) (filter (even) [0..10])
+
+
 --    describe "" $ do
 --      it "" $ do
 --        show () `shouldBe` ""
