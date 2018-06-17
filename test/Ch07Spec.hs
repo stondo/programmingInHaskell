@@ -113,11 +113,6 @@ spec =
       it "removes elements from a list while they satisfy a predicate" $ do
         dropWhile' even [2,4,6,1,4,5] `shouldBe` [1,4,5]
 
-    describe "dropWhile''" $ do
-      it "removes elements from a list while they satisfy a predicate" $ do
-        dropWhile'' even [2,4,6,1,4,5] `shouldBe` [1,4,5]
-
-
 
 --    describe "" $ do
 --      it "" $ do

@@ -27,7 +27,6 @@ module Ch07
   , takeWhile'
   , takeWhile''
   , dropWhile'
-  , dropWhile''
   ) where
 
 import Data.Char
@@ -159,15 +158,8 @@ takeWhile'' _ []                 = []
 takeWhile'' f (x:xs) | f x       = x : takeWhile'' f xs
                      | otherwise = []
 
--- d.
+
 dropWhile' :: (a -> Bool) -> [a] -> [a]
-dropWhile' f = foldl loop []
-                where loop xs x
-                                | f x       = xs
-                                | otherwise = x:xs
-
-
-dropWhile'' :: (a -> Bool) -> [a] -> [a]
-dropWhile'' _ []     = []
-dropWhile'' f (x:xs) | f x = dropWhile'' f xs
-                     | otherwise = x:xs
+dropWhile' _ []     = []
+dropWhile' f (x:xs) | f x       = dropWhile' f xs
+                    | otherwise = x:xs
