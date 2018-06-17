@@ -187,7 +187,7 @@ dec2int = foldl ((+) . (*10)) 0
 -- foldl (\acc x -> traceShow acc (x + acc * 10)) 0 [2,3,4,5]
 -- foldl (\acc x -> traceShow (acc * 10, x) (x + acc * 10)) 0 [2,3,4,5]
 
--- 5.
+-- 5. https://www.reddit.com/r/haskell/comments/uukdp/definitions_of_curry_and_uncurry/
 curry' :: ((a, b) -> c) -> (a -> b -> c)
 curry' f = \x y -> f (x, y)
 
