@@ -29,6 +29,7 @@ module Ch07
   , dropWhile'
   , map'
   , filter'
+  , dec2int
   ) where
 
 import Data.Char
@@ -176,3 +177,10 @@ filter' :: (a -> Bool) -> [a] -> [a]
 filter' p = foldr loop []
               where loop e acc | p e       =  e:acc
                                | otherwise =  acc
+
+-- 4.
+dec2int :: [Int] -> Int
+dec2int = foldl ((+) . (*10)) 0
+-- dec2int = scanl ((+) . (*10)) 0
+-- foldl (\acc x -> traceShow acc (x + acc * 10)) 0 [2,3,4,5]
+-- foldl (\acc x -> traceShow (acc * 10, x) (x + acc * 10)) 0 [2,3,4,5]

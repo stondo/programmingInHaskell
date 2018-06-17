@@ -121,6 +121,11 @@ spec =
       it "filters the list with the given function" $ do
         filter' odd [0..10] `shouldBe` [1,3,5,7,9]
 
+    describe "dec2int" $ do
+      it "convers a decimal number (given in input as an array) into an integer" $ do
+        dec2int [2,3,4,5] `shouldBe` 2345
+
+
 --    describe "" $ do
 --      it "" $ do
 --        show () `shouldBe` ""
