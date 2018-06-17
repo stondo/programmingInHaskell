@@ -27,6 +27,8 @@ module Ch07
   , takeWhile'
   , takeWhile''
   , dropWhile'
+  , map'
+  , filter'
   ) where
 
 import Data.Char
@@ -163,3 +165,14 @@ dropWhile' :: (a -> Bool) -> [a] -> [a]
 dropWhile' _ []     = []
 dropWhile' f (x:xs) | f x       = dropWhile' f xs
                     | otherwise = x:xs
+
+-- 3.
+-- map :: (a -> b) -> [a] -> [b]
+-- foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
+map' :: (a -> b) -> [a] -> [b]
+map' f = foldr ((:) . f) []
+
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' p = foldr loop []
+              where loop e acc | p e       =  e:acc
+                               | otherwise =  acc

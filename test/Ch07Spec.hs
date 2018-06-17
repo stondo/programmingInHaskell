@@ -113,6 +113,13 @@ spec =
       it "removes elements from a list while they satisfy a predicate" $ do
         dropWhile' even [2,4,6,1,4,5] `shouldBe` [1,4,5]
 
+    describe "map'" $ do
+      it "applies the fiven function to every element of the list" $ do
+        map' (+1) [1..5] `shouldBe` [2,3,4,5,6]
+
+    describe "filter'" $ do
+      it "filters the list with the given function" $ do
+        filter' odd [0..10] `shouldBe` [1,3,5,7,9]
 
 --    describe "" $ do
 --      it "" $ do
