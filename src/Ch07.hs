@@ -26,6 +26,7 @@ module Ch07
   , any'
   , takeWhile'
   , takeWhile''
+  , dropWhile'
   , dropWhile''
   ) where
 
@@ -149,8 +150,8 @@ any' f = or . map f
 takeWhile' :: (a -> Bool) -> [a] -> [a]
 takeWhile' f = foldr loop []
                  where loop x xs
-                                  | f x       = trace (" f x True: ") x:xs
-                                  | otherwise = trace " otherwise: empty list " []
+                                 | f x       = x:xs
+                                 | otherwise = []
 --takeWhile' f = foldr (\(x:xs) -> if (f x) then x else xs) []
 
 takeWhile'' :: (a -> Bool) -> [a] -> [a]
@@ -159,6 +160,13 @@ takeWhile'' f (x:xs) | f x       = x : takeWhile'' f xs
                      | otherwise = []
 
 -- d.
+dropWhile' :: (a -> Bool) -> [a] -> [a]
+dropWhile' f = foldl loop []
+                where loop xs x
+                                | f x       = xs
+                                | otherwise = x:xs
+
+
 dropWhile'' :: (a -> Bool) -> [a] -> [a]
 dropWhile'' _ []     = []
 dropWhile'' f (x:xs) | f x = dropWhile'' f xs

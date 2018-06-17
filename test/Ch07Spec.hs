@@ -93,6 +93,31 @@ spec =
       it "are indeed equal" $ do
         [(+1) x | x <- [0..10], even x] `shouldBe` map (+1) (filter (even) [0..10])
 
+    describe "all'" $ do
+      it "decides if all elements of a list satisfy a predicate" $ do
+        all' even [2,4,6,8] `shouldBe` True
+
+    describe "any'" $ do
+      it "decides if any element of a list satisfies a predicate" $ do
+          any' odd [0,2,1,3,6,8,9] `shouldBe` True
+
+    describe "takeWhile'" $ do
+      it "selects elemtnts from a list while they satisfy a predicate" $ do
+        takeWhile' even [2,4,6,1,4,5] `shouldBe` [2,4,6]
+
+    describe "takeWhile''" $ do
+      it "selects elemtnts from a list while they satisfy a predicate" $ do
+        takeWhile'' even [2,4,6,1,4,5] `shouldBe` [2,4,6]
+
+    describe "dropWhile'" $ do
+      it "removes elements from a list while they satisfy a predicate" $ do
+        dropWhile' even [2,4,6,1,4,5] `shouldBe` [1,4,5]
+
+    describe "dropWhile''" $ do
+      it "removes elements from a list while they satisfy a predicate" $ do
+        dropWhile'' even [2,4,6,1,4,5] `shouldBe` [1,4,5]
+
+
 
 --    describe "" $ do
 --      it "" $ do
