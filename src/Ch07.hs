@@ -30,6 +30,8 @@ module Ch07
   , map'
   , filter'
   , dec2int
+  , curry'
+  , uncurry'
   ) where
 
 import Data.Char
@@ -184,3 +186,18 @@ dec2int = foldl ((+) . (*10)) 0
 -- dec2int = scanl ((+) . (*10)) 0
 -- foldl (\acc x -> traceShow acc (x + acc * 10)) 0 [2,3,4,5]
 -- foldl (\acc x -> traceShow (acc * 10, x) (x + acc * 10)) 0 [2,3,4,5]
+
+-- 5.
+curry' :: ((a, b) -> c) -> (a -> b -> c)
+curry' f = \x y -> f (x, y)
+
+uncurry' :: ((a -> b -> c) ->  (a, b) -> c)
+uncurry' f = \(x, y) -> f x y
+
+-- myAdd (a,b) = a + b
+-- myAddCurried = curry' myAdd
+-- myAddUncurried = uncurry' myAddCurried
+
+-- myAdd :: Num a => (a, a) -> a
+-- myAddCurried :: Num c => c -> c -> c
+-- myAddUncurried :: Num c => (c, c) -> c
