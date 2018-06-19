@@ -32,6 +32,10 @@ module Ch07
   , dec2int
   , curry'
   , uncurry'
+  , unfold
+  , int2binUnfold
+  , chop8Unfold
+  , mapUnfold
   ) where
 
 import Data.Char
@@ -201,3 +205,15 @@ uncurry' f = \(x, y) -> f x y
 -- myAdd :: Num a => (a, a) -> a
 -- myAddCurried :: Num c => c -> c -> c
 -- myAddUncurried :: Num c => (c, c) -> c
+
+-- 6.
+unfold p h t x | p x       = []
+               | otherwise = h x : unfold p h t (t x)
+
+int2binUnfold = unfold (== 0) (`mod` 2) (`div` 2)
+
+chop8Unfold = unfold (null) (take 8) (drop 8) 
+
+mapUnfold f = unfold (null) (f) (tail)
+
+-- iterateUnfold f = unfold () () ()
