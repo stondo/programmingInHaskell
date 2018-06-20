@@ -217,4 +217,4 @@ chop8Unfold = unfold (null) (take 8) (drop 8)
 
 mapUnfold f = unfold (null) (f . head) (tail)
 
-iterateUnfold f = unfold (not . null) (f) (id)
+iterateUnfold f = unfold (const False) (id) (f)

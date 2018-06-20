@@ -4,6 +4,8 @@ import Ch07
 
 import Test.Hspec (Spec, describe, context, it, shouldBe)
 
+import Data.Char
+
 -- |Required for auto-discpvery
 spec :: Spec
 spec =
@@ -125,6 +127,21 @@ spec =
       it "convers a decimal number (given in input as an array) into an integer" $ do
         dec2int [2,3,4,5] `shouldBe` 2345
 
+    describe "int2binunfold" $ do
+      it "converts and integer to its corresponding binary number (output to an array with inverted order)" $ do
+        int2binUnfold 13 `shouldBe` [1,0,1,1]
+
+    describe "chop8unfold" $ do
+      it "chops a list of bits into 8 bit binary number" $ do
+        chop8Unfold [1,0,0,0,0,1,1,0,0,1,0,0,0,1,1,0,1,1,0,0,0,1,1,0] `shouldBe` chop8 [1,0,0,0,0,1,1,0,0,1,0,0,0,1,1,0,1,1,0,0,0,1,1,0]
+
+    describe "mapUnfold" $ do
+      it "applies the given function to every element of the list using unfold function" $ do
+        mapUnfold (+1) [1..5] `shouldBe` [2,3,4,5,6]
+
+    describe "iterateUnfold" $ do
+      it "generates an infine list of the given value using unfold fucntion" $ do
+        take 26 (iterateUnfold  (chr . (+1) . ord) 'a') `shouldBe` "abcdefghijklmnopqrstuvwxyz"
 
 
 --    describe "" $ do
