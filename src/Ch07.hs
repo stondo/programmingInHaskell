@@ -36,6 +36,7 @@ module Ch07
   , int2binUnfold
   , chop8Unfold
   , mapUnfold
+  , iterateUnfold
   ) where
 
 import Data.Char
@@ -214,6 +215,6 @@ int2binUnfold = unfold (== 0) (`mod` 2) (`div` 2)
 
 chop8Unfold = unfold (null) (take 8) (drop 8) 
 
-mapUnfold f = unfold (null) (f) (tail)
+mapUnfold f = unfold (null) (f . head) (tail)
 
--- iterateUnfold f = unfold () () ()
+iterateUnfold f = unfold (not . null) (f) (id)
