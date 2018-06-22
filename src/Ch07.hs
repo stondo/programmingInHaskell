@@ -37,6 +37,7 @@ module Ch07
   , chop8Unfold
   , mapUnfold
   , iterateUnfold
+  , altMap
   ) where
 
 import Data.Char
@@ -218,3 +219,7 @@ chop8Unfold = unfold (null) (take 8) (drop 8)
 mapUnfold f = unfold (null) (f . head) (tail)
 
 iterateUnfold f = unfold (const False) (id) (f)
+
+-- 9.
+altMap :: (a -> b) -> (a -> b) -> [a] -> [b]
+altMap f g xs = [if (idx `mod` 2 == 0) then f x else g x | (x, idx) <- xs `zip` [0..]]

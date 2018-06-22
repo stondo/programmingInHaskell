@@ -143,6 +143,9 @@ spec =
       it "generates an infine list of the given value using unfold fucntion" $ do
         take 26 (iterateUnfold  (chr . (+1) . ord) 'a') `shouldBe` "abcdefghijklmnopqrstuvwxyz"
 
+    describe "altMap" $ do
+      it "alternately applies its two argument functions to successive elements in a list, in turn about order" $ do
+        altMap (+10) (+100) [0..4] `shouldBe` [10,101,12,103,14]
 
 --    describe "" $ do
 --      it "" $ do
