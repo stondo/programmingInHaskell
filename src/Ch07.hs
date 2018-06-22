@@ -220,6 +220,7 @@ mapUnfold f = unfold (null) (f . head) (tail)
 
 iterateUnfold f = unfold (const False) (id) (f)
 
+
 -- 9.
 altMap :: (a -> b) -> (a -> b) -> [a] -> [b]
 altMap f g xs = [if (idx `mod` 2 == 0) then f x else g x | (x, idx) <- xs `zip` [0..]]
