@@ -109,11 +109,11 @@ spec =
         show (luhnDouble 6) `shouldBe` "3"
 
     describe "luhn" $ do
-      it "decides is a four-digit bank card number is valid (VALID)" $ do
+      it "decides if a four-digit bank card number is valid (VALID)" $ do
         show (luhn 1 7 8 4) `shouldBe` "True"
 
     describe "luhn" $ do
-      it "decides is a four-digit bank card number is valid (NOT VALID)" $ do
+      it "decides if a four-digit bank card number is valid (NOT VALID)" $ do
         show (luhn 5 7 2 9) `shouldBe` "False"
 
 

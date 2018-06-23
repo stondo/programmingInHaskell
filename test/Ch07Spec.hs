@@ -147,6 +147,14 @@ spec =
       it "alternately applies its two argument functions to successive elements in a list, in turn about order" $ do
         altMap (+10) (+100) [0..4] `shouldBe` [10,101,12,103,14]
 
+    describe "altMap'" $ do
+      it "alternately applies its two argument functions to successive elements in a list, in turn about order" $ do
+        altMap' (+10) (+100) [0..4] `shouldBe` [10,101,12,103,14]
+
+    describe "luhnAny" $ do
+      it "decides if a bank card number of any length is valid" $ do
+        luhnAny [1,7,8,4,1,7,8,4,1,7,8,4,1,7,8,4] `shouldBe` True
+
 --    describe "" $ do
 --      it "" $ do
 --        show () `shouldBe` ""

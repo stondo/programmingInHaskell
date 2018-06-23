@@ -38,12 +38,16 @@ module Ch07
   , mapUnfold
   , iterateUnfold
   , altMap
+  , altMap'
+  , luhnAny
   ) where
 
 import Data.Char
 import Data.List
 
 import Debug.Trace
+
+import Ch04 (luhnDouble)
 
 debug = flip trace
 
@@ -224,3 +228,15 @@ iterateUnfold f = unfold (const False) (id) (f)
 -- 9.
 altMap :: (a -> b) -> (a -> b) -> [a] -> [b]
 altMap f g xs = [if (idx `mod` 2 == 0) then f x else g x | (x, idx) <- xs `zip` [0..]]
+
+altMap' :: (a -> b) -> (a -> b) -> [a] -> [b]
+altMap' _ _ []        = []
+altMap' f g [x]       = [f x]
+altMap' f g (x:x1:xs) = f x : g x1 : altMap' f g xs
+
+-- 10.
+-- luhn :: Int -> Int -> Int -> Int -> Bool
+-- luhn a b c d = (d + luhnDouble c + b + luhnDouble a) `mod` 10 == 0
+
+luhnAny :: [Int] -> Bool
+luhnAny xs = foldr (+) 0 (altMap' luhnDouble id xs) `mod` 10 == 0
