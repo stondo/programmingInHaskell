@@ -40,6 +40,13 @@ module Ch07
   , altMap
   , altMap'
   , luhnAny
+  , addParityBit
+  , encodeWithParity
+  , decodeWithParity
+  , chop9
+  , transmitWithParity
+  , transmitWithParityFaultyChannel
+  , channelFaulty
   ) where
 
 import Data.Char
@@ -234,9 +241,41 @@ altMap' _ _ []        = []
 altMap' f g [x]       = [f x]
 altMap' f g (x:x1:xs) = f x : g x1 : altMap' f g xs
 
--- 10.
--- luhn :: Int -> Int -> Int -> Int -> Bool
--- luhn a b c d = (d + luhnDouble c + b + luhnDouble a) `mod` 10 == 0
+-- 7.
+-- encode :: String -> [Bit]
+-- encode = concat . map (make8 . int2bin . ord)
 
+addParityBit :: [Bit] -> [Bit]
+addParityBit xs | numOfOnes `mod` 2 == 0 = 0 : xs
+                | otherwise              = 1 : xs
+                    where numOfOnes = length (filter (== 1) xs)
+
+encodeWithParity :: String -> [Bit]
+encodeWithParity = concat . map (addParityBit . make8 . int2bin . ord)
+
+chop9 :: [Bit] -> [[Bit]]
+chop9 [] = []
+chop9 bits = take 9 bits : chop9 (drop 9 bits)
+
+decodeWithParity :: [Bit] -> String
+decodeWithParity = map (chr . bin2int . checkParity) . chop9
+                     where checkParity bits | (head bits == 0 && length (filter (== 1) (tail bits)) `mod` 2 == 0) || (head bits == 1 && length (filter (== 1) (tail bits)) `mod` 2 == 1) = tail bits
+                                            | otherwise = error "Error: parity bit check failed."
+
+transmitWithParity :: String -> String
+transmitWithParity = decodeWithParity . channel . encodeWithParity
+
+transmitWithParityFaultyChannel :: String -> String
+transmitWithParityFaultyChannel = decodeWithParity . channelFaulty . encodeWithParity
+
+-- transmitWithParityFaultyChannel  "antani sbiricuda cum sblindosterno a destra!"
+-- "\176*** Exception: Error: parity bit check failed.
+-- CallStack (from HasCallStack):
+--   error, called at /Volumes/toshi/dev/haskell/programmingInHaskell/src/Ch07.hs:263:59 in main:Ch07
+
+channelFaulty :: [Bit] -> [Bit]
+channelFaulty = tail
+
+-- 10.
 luhnAny :: [Int] -> Bool
 luhnAny xs = foldr (+) 0 (altMap' luhnDouble id xs) `mod` 10 == 0

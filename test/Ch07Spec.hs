@@ -37,11 +37,11 @@ spec =
 
     describe "make8" $ do
       it "truncates or extends a binary number to make it precisely 8 bits" $ do
-        show (make8 [1,0,1,1]) `shouldBe` "[1,0,1,1,0,0,0,0]"
+        make8 [1,0,1,1] `shouldBe` [1,0,1,1,0,0,0,0]
 
     describe "encode" $ do
       it "encodes a string of characters in a list of concatenated 8 bits binary number corresponding to the Unicode number of each character" $ do
-        show (encode "abc") `shouldBe` "[1,0,0,0,0,1,1,0,0,1,0,0,0,1,1,0,1,1,0,0,0,1,1,0]"
+        encode "abc" `shouldBe` [1,0,0,0,0,1,1,0,0,1,0,0,0,1,1,0,1,1,0,0,0,1,1,0]
 
     describe "chop8" $ do
       it "chops a list of bits into 8 bit binary number" $ do
@@ -49,19 +49,19 @@ spec =
 
     describe "decode" $ do
       it "decodes a list of bits as a string" $ do
-        show (decode [1,0,0,0,0,1,1,0,0,1,0,0,0,1,1,0,1,1,0,0,0,1,1,0]) `shouldBe` "\"abc\""
+        decode [1,0,0,0,0,1,1,0,0,1,0,0,0,1,1,0,1,1,0,0,0,1,1,0] `shouldBe` "abc"
 
     describe "transmit" $ do
       it "simulates the transmisison of a string of characters as a list of bits using a perfect communication channel" $ do
-        show (transmit "antani sbiricuda cum sblindosterno a destra!") `shouldBe` "\"antani sbiricuda cum sblindosterno a destra!\""
+        transmit "antani sbiricuda cum sblindosterno a destra!" `shouldBe` "antani sbiricuda cum sblindosterno a destra!"
 
     describe "channel" $ do
       it "Bit type identity function" $ do
-        show (channel [1,0,1,1,0,0,0,0]) `shouldBe` "[1,0,1,1,0,0,0,0]"
+        channel [1,0,1,1,0,0,0,0] `shouldBe` [1,0,1,1,0,0,0,0]
 
     describe "count" $ do
       it "counts the element in a list that are equals to the given one" $ do
-        show (count "Red" votes) `shouldBe` "2"
+        count "Red" votes `shouldBe` 2
 
     describe "rmdups" $ do
       it "removes duplicates from a list" $ do
@@ -154,6 +154,26 @@ spec =
     describe "luhnAny" $ do
       it "decides if a bank card number of any length is valid" $ do
         luhnAny [1,7,8,4,1,7,8,4,1,7,8,4,1,7,8,4] `shouldBe` True
+
+    describe "chop9" $ do
+      it "chops a list of bits into 9 bit binary number" $ do
+        show (chop9 [1,1,0,0,0,0,1,1,0,1,0,1,0,0,0,1,1,0,0,1,1,0,0,0,1,1,0]) `shouldBe` "[[1,1,0,0,0,0,1,1,0],[1,0,1,0,0,0,1,1,0],[0,1,1,0,0,0,1,1,0]]"
+
+    describe "encodeWithParity" $ do
+      it "encodes a string of characters in a list of concatenated 9 bits, 1 parity bit and binary number corresponding to the Unicode number of each character" $ do
+        encodeWithParity "abc" `shouldBe` [1,1,0,0,0,0,1,1,0,1,0,1,0,0,0,1,1,0,0,1,1,0,0,0,1,1,0]
+
+    describe "decodeWithParity" $ do
+      it "decodes a list of bits as a string" $ do
+        decodeWithParity [1,1,0,0,0,0,1,1,0,1,0,1,0,0,0,1,1,0,0,1,1,0,0,0,1,1,0] `shouldBe` "abc"
+
+    describe "transmitWithParity" $ do
+      it "simulates the transmisison of a string of characters as a list of bits using a perfect communication channel" $ do
+        transmitWithParity "antani sbiricuda cum sblindosterno a destra!" `shouldBe` "antani sbiricuda cum sblindosterno a destra!"
+
+    describe "channelFaulty" $ do
+      it "Bit type identity function" $ do
+        channelFaulty [1,0,1,1,0,0,0,0] `shouldBe` [0,1,1,0,0,0,0]
 
 --    describe "" $ do
 --      it "" $ do
