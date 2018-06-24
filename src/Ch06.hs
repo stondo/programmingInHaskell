@@ -3,8 +3,8 @@ module Ch06
   , insert
   , isort
   , fib
-  , evens
-  , odds
+  , evensPos
+  , oddsPos
   , fac'
   , sumdown
   , powNonNegative
@@ -41,13 +41,13 @@ fib 0 = 0
 fib 1 = 1
 fib n = fib (n - 1) + fib (n - 2)
 
-evens :: [a] -> [a]
-evens []     = []
-evens (x:xs) = x : odds xs
+evensPos :: [a] -> [a]
+evensPos []     = []
+evensPos (x:xs) = x : oddsPos xs
 
-odds :: [a] -> [a]
-odds []     = []
-odds (_:xs) = evens xs
+oddsPos :: [a] -> [a]
+oddsPos []     = []
+oddsPos (_:xs) = evensPos xs
 
 -- Exercises
 
