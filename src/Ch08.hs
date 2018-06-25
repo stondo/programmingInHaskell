@@ -5,13 +5,14 @@ module Ch08
   , Assoc
   , findAssoc
   , Move (..)
---  , North
---  , South
---  , East
---  , West
   , move
   , moves
   , rev
+  , Nat (..)
+  , nat2int
+  , int2nat
+  , addNat
+  , addNat'
   ) where
 
 import Debug.Trace
@@ -46,3 +47,39 @@ rev North = South
 rev South = North
 rev East = West
 rev West = East
+
+data Shape = Circle Float | Rect Float Float deriving Show
+
+square :: Float -> Shape
+square n = Rect n n
+
+area :: Shape -> Float
+area (Circle r) = pi * r^2
+area (Rect x y) = x * y
+
+safediv :: Int -> Int -> Maybe Int
+safediv _ 0 = Nothing
+safediv m n = Just (m `div` n)
+
+safehead :: [a] -> Maybe a
+safehead [] = Nothing
+safehead xs = Just (head xs)
+
+--newType Nat = N Int
+data Nat = Zero | Succ Nat
+
+nat2int :: Nat -> Int
+nat2int Zero = 0
+nat2int (Succ n) = 1 + nat2int n
+
+int2nat :: Int -> Nat
+int2nat 0 = Zero
+int2nat n = Succ (int2nat (n - 1))
+
+addNat :: Nat -> Nat -> Nat
+addNat Zero n  = n
+addNat (Succ m) n = Succ (addNat m n)
+
+
+addNat' :: Nat -> Nat -> Nat
+addNat' m n = int2nat (nat2int m + nat2int n)
