@@ -13,6 +13,13 @@ module Ch08
   , int2nat
   , addNat
   , addNat'
+  , List (..)
+  , len
+  , Tree (..)
+  , t
+  , occurs
+  , flatten
+  , occursInSearchTree
   ) where
 
 import Debug.Trace
@@ -66,7 +73,7 @@ safehead [] = Nothing
 safehead xs = Just (head xs)
 
 --newType Nat = N Int
-data Nat = Zero | Succ Nat
+data Nat = Zero | Succ Nat deriving Show
 
 nat2int :: Nat -> Int
 nat2int Zero = 0
@@ -83,3 +90,40 @@ addNat (Succ m) n = Succ (addNat m n)
 
 addNat' :: Nat -> Nat -> Nat
 addNat' m n = int2nat (nat2int m + nat2int n)
+
+
+data List a = Nil | Cons a (List a) deriving Show
+
+len :: List a -> Int
+len Nil         = 0
+len (Cons _ xs) = 1 + len xs
+
+
+data Tree a = Leaf a | Node (Tree a) a (Tree a) deriving Show
+
+t :: Tree Int
+t = Node (Node (Leaf 1) 3 (Leaf 4)) 5
+         (Node (Leaf 6) 7 (Leaf 9))
+
+occurs :: Eq a => a -> Tree a -> Bool
+occurs x (Leaf y)     = x == y
+occurs x (Node l y r) = x == y || occurs x l || occurs x r
+
+flatten :: Tree a -> [a]
+flatten (Leaf x)     = [x]
+flatten (Node l x r) = flatten l ++ [x] ++ flatten r
+
+occursInSearchTree :: Ord a => a -> Tree a -> Bool
+occursInSearchTree x (Leaf y)              = x == y
+occursInSearchTree x (Node l y r) | x == y     = True
+                                  | x > y      = occurs x r
+                                  | otherwise  = occurs x l
+
+-- other Tree's definition
+-- data Tree a = Leaf a | Node (Tree a) (Tree a)
+--
+-- data Tree a = Leaf | Node (Tree a) a (Tree a)
+--
+-- data Tree a b = Leaf a | Node (Tree a b) b (Tree a b)
+--
+-- data Tree a = Node a (Tree a)
