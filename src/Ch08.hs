@@ -31,6 +31,8 @@ module Ch08
   , bools
   , substs
   , isTaut
+  , Expr (..)
+  , value
   ) where
 
 import Debug.Trace
@@ -197,3 +199,12 @@ substs p = map (zip vs) (bools (length vs))
 
 isTaut :: Prop -> Bool
 isTaut p = and [eval s p | s <- substs p]
+
+-- 8.7 Abstract Machine
+
+data Expr = Val Int | Add Expr Expr
+
+value :: Expr -> Int
+value (Val n)   = n
+value (Add x y) = value x + value y
+
