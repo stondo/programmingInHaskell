@@ -32,7 +32,12 @@ module Ch08
   , substs
   , isTaut
   , Expr (..)
+  , valueSimple
+  , Op (..)
+  , evalAbsMachine
+  , exec
   , value
+  , multNat
   ) where
 
 import Debug.Trace
@@ -204,7 +209,39 @@ isTaut p = and [eval s p | s <- substs p]
 
 data Expr = Val Int | Add Expr Expr
 
-value :: Expr -> Int
-value (Val n)   = n
-value (Add x y) = value x + value y
+valueSimple :: Expr -> Int
+valueSimple (Val n)   = n
+valueSimple (Add x y) = valueSimple x + valueSimple y
 
+type Cont = [Op]
+
+data Op = EVAL Expr | ADD Int
+
+evalAbsMachine :: Expr -> Cont -> Int
+evalAbsMachine (Val n)   c = exec c n
+evalAbsMachine (Add x y) c = evalAbsMachine x (EVAL y : c)
+
+exec :: Cont -> Int -> Int
+exec []     n = n
+exec (EVAL y : c) n = evalAbsMachine y (ADD n : c)
+exec (ADD n : c)  m = exec c (n + m)
+
+value :: Expr -> Int
+value e = evalAbsMachine e []
+
+-- 8.9 Exercises
+
+-- 1
+-- multNat :: Nat -> Nat -> Nat
+-- multNat _ Zero = addNat Zero Zero
+-- multNat Zero _ = addNat Zero Zero
+-- multNat (Succ Zero) n     = addNat Zero n
+-- multNat m (Succ Zero)     = addNat m Zero
+multNat _ Zero        = Zero
+multNat Zero _        = Zero
+multNat (Succ Zero) n = n
+multNat m (Succ Zero) = m
+multNat m (Succ n)    = addNat m (multNat m n)
+
+
+-- multNat n m = int2nat (nat2int n * nat2int m)
