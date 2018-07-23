@@ -136,8 +136,8 @@ flatten (Node l x r) = flatten l ++ [x] ++ flatten r
 occursInSearchTree :: Ord a => a -> Tree a -> Bool
 occursInSearchTree x (Leaf y)              = x == y
 occursInSearchTree x (Node l y r) | x == y     = True
-                                  | x < y      = occurs x l
-                                  | otherwise  = occurs x r
+                                  | x < y      = occursInSearchTree x l
+                                  | otherwise  = occursInSearchTree x r
 
 -- other Tree's definition
 -- data Tree a = Leaf a | Node (Tree a) (Tree a)
@@ -243,5 +243,13 @@ multNat (Succ Zero) n = n
 multNat m (Succ Zero) = m
 multNat m (Succ n)    = addNat m (multNat m n)
 
-
 -- multNat n m = int2nat (nat2int n * nat2int m)
+
+-- 2
+occursPerf :: Ord a => a -> Tree a -> Bool
+occursPerf x = [ | , compare x x']
+
+occursPerf x (Leaf v)              = x == v
+occursPerf x (Node l v r) | x == v = True
+                          | x < v      = occursPerf x l
+                          | otherwise  = occursPerf x r
