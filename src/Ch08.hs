@@ -38,6 +38,10 @@ module Ch08
   , exec
   , value
   , multNat
+  , occursWithCompare
+  , TreeWihtLeafValue (..)
+  , numOfLeaves
+  , tWihtLeafValue
   ) where
 
 import Debug.Trace
@@ -134,7 +138,7 @@ flatten (Leaf x)     = [x]
 flatten (Node l x r) = flatten l ++ [x] ++ flatten r
 
 occursInSearchTree :: Ord a => a -> Tree a -> Bool
-occursInSearchTree x (Leaf y)              = x == y
+occursInSearchTree x (Leaf y)                  = x == y
 occursInSearchTree x (Node l y r) | x == y     = True
                                   | x < y      = occurs x l
                                   | otherwise  = occurs x r
@@ -231,17 +235,29 @@ value e = evalAbsMachine e []
 
 -- 8.9 Exercises
 
--- 1
--- multNat :: Nat -> Nat -> Nat
--- multNat _ Zero = addNat Zero Zero
--- multNat Zero _ = addNat Zero Zero
--- multNat (Succ Zero) n     = addNat Zero n
--- multNat m (Succ Zero)     = addNat m Zero
+-- 1.
 multNat _ Zero        = Zero
-multNat Zero _        = Zero
-multNat (Succ Zero) n = n
-multNat m (Succ Zero) = m
 multNat m (Succ n)    = addNat m (multNat m n)
 
-
 -- multNat n m = int2nat (nat2int n * nat2int m)
+
+-- 2.
+occursWithCompare :: Ord a => a -> Tree a -> Bool
+occursWithCompare x (Leaf v)     = x == v
+occursWithCompare x (Node l v r) = case compare x v of
+                                     LT -> occursWithCompare x l
+                                     EQ -> True
+                                     GT -> occursWithCompare x r
+
+-- 3.
+data TreeWihtLeafValue a = LeafVal a | NodeBranch (TreeWihtLeafValue a) (TreeWihtLeafValue a) deriving Show
+
+numOfLeaves :: TreeWihtLeafValue a -> Int
+numOfLeaves (LeafVal _)      = 1
+numOfLeaves (NodeBranch l r) = numOfLeaves l + numOfLeaves r
+
+tWihtLeafValue :: TreeWihtLeafValue Int
+tWihtLeafValue = NodeBranch (NodeBranch (LeafVal 1) (LeafVal 4)) (NodeBranch (LeafVal 6) (LeafVal 9))
+
+-- balanced :: TreeWihtLeafValue a -> Bool
+-- balanced
