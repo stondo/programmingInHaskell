@@ -42,6 +42,10 @@ module Ch08
   , TreeWihtLeafValue (..)
   , numOfLeaves
   , tWihtLeafValue
+  , balanced
+  , tWihtLeafValueUnbalanced
+  , tWihtLeafValueOneBalance
+  , splitList
   ) where
 
 import Debug.Trace
@@ -259,5 +263,21 @@ numOfLeaves (NodeBranch l r) = numOfLeaves l + numOfLeaves r
 tWihtLeafValue :: TreeWihtLeafValue Int
 tWihtLeafValue = NodeBranch (NodeBranch (LeafVal 1) (LeafVal 4)) (NodeBranch (LeafVal 6) (LeafVal 9))
 
--- balanced :: TreeWihtLeafValue a -> Bool
--- balanced
+tWihtLeafValueOneBalance :: TreeWihtLeafValue Int
+tWihtLeafValueOneBalance = NodeBranch (NodeBranch (LeafVal 1) (NodeBranch (LeafVal 2) (LeafVal 4))) (NodeBranch (LeafVal 6) (LeafVal 9))
+
+tWihtLeafValueUnbalanced :: TreeWihtLeafValue Int
+tWihtLeafValueUnbalanced = NodeBranch (NodeBranch (LeafVal 1) (NodeBranch (LeafVal 2) (NodeBranch (LeafVal 3) (LeafVal 4)))) (NodeBranch (LeafVal 11) (LeafVal 12))
+
+balanced :: TreeWihtLeafValue a -> Bool
+-- balanced (LeafVal _)                                               = False
+balanced (NodeBranch l r) | numOfLeaves l == numOfLeaves r         = True
+                          | numOfLeaves l + 1 - numOfLeaves r == 0 = True
+                          | numOfLeaves r + 1 - numOfLeaves l == 0 = True
+                          | otherwise                              = False
+
+-- 4.
+splitList :: [a] -> ([a],[a])
+splitList xs = (take ((length xs) `div` 2) xs, drop ((length xs) `div` 2) xs)
+
+-- balance :: [a] -> TreeWihtLeafValue a
