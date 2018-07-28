@@ -140,8 +140,8 @@ flatten (Node l x r) = flatten l ++ [x] ++ flatten r
 occursInSearchTree :: Ord a => a -> Tree a -> Bool
 occursInSearchTree x (Leaf y)                  = x == y
 occursInSearchTree x (Node l y r) | x == y     = True
-                                  | x < y      = occurs x l
-                                  | otherwise  = occurs x r
+                                  | x < y      = occursInSearchTree x l
+                                  | otherwise  = occursInSearchTree x r
 
 -- other Tree's definition
 -- data Tree a = Leaf a | Node (Tree a) (Tree a)
