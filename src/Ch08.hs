@@ -43,14 +43,18 @@ module Ch08
   , numOfLeaves
   , tWihtLeafValue
   , balanced
+  , balanced'
   , tWihtLeafValueUnbalanced
   , tWihtLeafValueOneBalance
   , splitList
+  , balance
+  , halveList
+  , balanceShort
   ) where
 
 import Debug.Trace
-
 import Ch07 (int2bin, rmdups)
+import Ch01 (qsort)
 
 debug = flip trace
 
@@ -270,14 +274,31 @@ tWihtLeafValueUnbalanced :: TreeWihtLeafValue Int
 tWihtLeafValueUnbalanced = NodeBranch (NodeBranch (LeafVal 1) (NodeBranch (LeafVal 2) (NodeBranch (LeafVal 3) (LeafVal 4)))) (NodeBranch (LeafVal 11) (LeafVal 12))
 
 balanced :: TreeWihtLeafValue a -> Bool
--- balanced (LeafVal _)                                               = False
+balanced (LeafVal _)                                               = True
 balanced (NodeBranch l r) | numOfLeaves l == numOfLeaves r         = True
                           | numOfLeaves l + 1 - numOfLeaves r == 0 = True
                           | numOfLeaves r + 1 - numOfLeaves l == 0 = True
                           | otherwise                              = False
 
+balanced' :: TreeWihtLeafValue a -> Bool
+balanced' (LeafVal _) = True
+balanced' (NodeBranch l r) = abs (numOfLeaves l - numOfLeaves r) <= 1 && balanced l && balanced r
+
+
 -- 4.
 splitList :: [a] -> ([a],[a])
 splitList xs = (take ((length xs) `div` 2) xs, drop ((length xs) `div` 2) xs)
 
--- balance :: [a] -> TreeWihtLeafValue a
+balance :: [a] -> TreeWihtLeafValue a
+balance (x:xs) | null xs        = LeafVal x
+balance (x:xs) | length xs == 1 = (NodeBranch (LeafVal x) (LeafVal (head xs)))
+balance (x:xs) | length xs > 1  = (NodeBranch (balance fs) (balance ss))
+  where (fs, ss) = splitList (x:xs)
+
+halveList :: [a] -> ([a],[a])
+halveList xs = splitAt (length xs `div` 2) xs
+
+balanceShort :: [a] -> TreeWihtLeafValue a
+balanceShort [x] = LeafVal x
+balanceShort xs  = NodeBranch (balanceShort fs) (balanceShort ss)
+  where (fs, ss) = halveList xs
