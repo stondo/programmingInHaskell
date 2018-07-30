@@ -50,6 +50,7 @@ module Ch08
   , balance
   , halveList
   , balanceShort
+  , folde
   ) where
 
 import Debug.Trace
@@ -303,3 +304,11 @@ balanceShort :: [a] -> TreeWihtLeafValue a
 balanceShort [x] = LeafVal x
 balanceShort xs  = NodeBranch (balanceShort fs) (balanceShort ss)
   where (fs, ss) = halveList xs
+
+-- 5.
+
+--  data Expr = Val Int | Add Expr Expr
+
+folde :: (Int -> a) -> (a -> a -> a) -> Expr -> a
+folde f _ (Val n)    = f n
+folde f g (Add e e') = 
