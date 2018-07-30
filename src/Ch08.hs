@@ -287,7 +287,8 @@ balanced' (NodeBranch l r) = abs (numOfLeaves l - numOfLeaves r) <= 1 && balance
 
 -- 4.
 splitList :: [a] -> ([a],[a])
-splitList xs = (take ((length xs) `div` 2) xs, drop ((length xs) `div` 2) xs)
+splitList xs = (take middle xs, drop middle xs)
+  where middle = (length xs) `div` 2
 
 balance :: [a] -> TreeWihtLeafValue a
 balance (x:xs) | null xs        = LeafVal x
