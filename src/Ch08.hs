@@ -50,7 +50,8 @@ module Ch08
   , balance
   , halveList
   , balanceShort
-  , folde
+--   , folde
+  , revStr
   ) where
 
 import Debug.Trace
@@ -309,6 +310,14 @@ balanceShort xs  = NodeBranch (balanceShort fs) (balanceShort ss)
 
 --  data Expr = Val Int | Add Expr Expr
 
-folde :: (Int -> a) -> (a -> a -> a) -> Expr -> a
-folde f _ (Val n)    = f n
-folde f g (Add e e') = 
+-- folde :: (Int -> a) -> (a -> a -> a) -> Expr -> a
+-- folde f _ (Val n)    = f n
+-- folde f g (Add e e') = 
+
+-- Messing around
+-- revStr :: String -> String
+-- revStr []    = []
+-- revStr [c]   = [c]
+-- revStr (h:t) = revStr t ++ [h]
+--
+-- [s !! i | i <- [length s - 1, length s - 2..0] ]
