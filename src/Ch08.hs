@@ -51,6 +51,8 @@ module Ch08
   , halveList
   , balanceShort
   , folde
+  , evalFolde
+  , sizeFolde
   ) where
 
 import Debug.Trace
@@ -309,3 +311,10 @@ balanceShort xs  = NodeBranch (balanceShort fs) (balanceShort ss)
 folde :: (Int -> a) -> (a -> a -> a) -> Expr -> a
 folde f _ (Val n)    = f n
 folde f g (Add e e') = g (folde f g e) (folde f g e')
+
+-- 6.
+evalFolde :: Expr -> Int
+
+
+
+sizeFolde :: Expr -> Int
