@@ -314,11 +314,17 @@ folde f g (Add e e') = g (folde f g e) (folde f g e')
 
 -- 6.
 evalFolde :: Expr -> Int
-evalFolde expr = folde f g expr
-                   where f = id
-                         g = (+)
+evalFolde expr = folde id (+) expr
+
 
 sizeFolde :: Expr -> Int
-sizeFolde expr = folde f g expr
-                   where f =  const 1
-                         g = (+)
+sizeFolde expr = folde (const 1) (+) expr
+
+
+-- 7.
+-- instance Eq a => Eq (Maybe a) where
+--
+--
+-- instance Eq a => Eq [a] where
+
+
