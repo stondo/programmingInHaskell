@@ -222,24 +222,28 @@ isTaut p = and [eval s p | s <- substs p]
 
 -- 8.7 Abstract Machine
 
-data Expr = Val Int | Add Expr Expr
+data Expr = Val Int | Add Expr Expr | Mult Expr Expr
 
 valueSimple :: Expr -> Int
-valueSimple (Val n)   = n
-valueSimple (Add x y) = valueSimple x + valueSimple y
+valueSimple (Val n)    = n
+valueSimple (Add x y)  = valueSimple x + valueSimple y
+valueSimple (Mult x y) = valueSimple x * valueSimple y
 
 type Cont = [Op]
 
-data Op = EVAL Expr | ADD Int
+data Op = EVALADD Expr | EVALMULT Expr | ADD Int | MULT Int
 
 evalAbsMachine :: Expr -> Cont -> Int
-evalAbsMachine (Val n)   c = exec c n
-evalAbsMachine (Add x y) c = evalAbsMachine x (EVAL y : c)
+evalAbsMachine (Val n)   c  = exec c n
+evalAbsMachine (Add x y) c  = evalAbsMachine x (EVALADD y : c)
+evalAbsMachine (Mult x y) c = evalAbsMachine x (EVALMULT y : c)
 
 exec :: Cont -> Int -> Int
 exec []     n = n
-exec (EVAL y : c) n = evalAbsMachine y (ADD n : c)
-exec (ADD n : c)  m = exec c (n + m)
+exec (EVALADD y : c)  n = evalAbsMachine y (ADD n : c)
+exec (EVALMULT y : c)  n = evalAbsMachine y (MULT n : c)
+exec (ADD n : c)   m = exec c (n + m)
+exec (MULT n : c)  m = exec c (n * m)
 
 value :: Expr -> Int
 value e = evalAbsMachine e []
@@ -323,8 +327,16 @@ sizeFolde expr = folde (const 1) (+) expr
 
 -- 7.
 -- instance Eq a => Eq (Maybe a) where
---
---
+--   (==) Nothing Nothing   = True
+--   (==) (Just x) (Just y) = x == y
+--   (==) _ _               = False
+
+
 -- instance Eq a => Eq [a] where
+--   (==) [] []         = True
+--   (==) (x:xs) (y:ys) = x == y && xs == ys
+--   (==) _ _           = False
 
 
+-- 9.
+-- Extened abstract machine to support the use of multiplication
