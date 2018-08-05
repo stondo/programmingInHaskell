@@ -20,10 +20,12 @@ module Ch08
   , occurs
   , flatten
   , occursInSearchTree
+  , p0
   , p1
   , p2
   , p3
   , p4
+  , p5
   , Subst
   , eval
   , vars
@@ -71,6 +73,7 @@ type Assoc k v = [(k,v)]
 
 findAssoc :: Eq k => k -> Assoc k v -> v
 findAssoc k t = head [v | (k',v) <- t,  k == k']
+
 
 data Move = North | South | East | West deriving Show
 
@@ -169,7 +172,12 @@ data Prop = Const Bool
           | Var Char
           | Not Prop
           | And Prop Prop
+          | Or  Prop Prop
           | Imply Prop Prop
+          | Equiv Prop Prop
+
+p0 :: Prop
+p0 = Or (Var 'A') (Not (Var 'A'))
 
 p1 :: Prop
 p1 = And (Var 'A') (Not (Var 'A'))
@@ -183,6 +191,9 @@ p3 = Imply (Var 'A') (And (Var 'A') (Var 'B'))
 p4 :: Prop
 p4 = Imply (And (Var 'A') (Imply (Var 'A') (Var 'B'))) (Var 'B')
 
+p5 :: Prop
+p5 = And (Var 'A') (Var 'B')
+
 
 type Subst = Assoc Char Bool
 
@@ -191,14 +202,18 @@ eval _ (Const b)   = b
 eval s (Var x)     = findAssoc x s
 eval s (Not p)     = not (eval s p)
 eval s (And p q)   = eval s p && eval s q
+eval s (Or p q)    = eval s p || eval s q
 eval s (Imply p q) = eval s p <= eval s q
+eval s (Equiv p q) = eval s p == eval s q
 
 vars :: Prop -> [Char]
 vars (Const _)   = []
 vars (Var x)     = [x]
 vars (Not p)     = vars p
 vars (And p q)   = vars p ++ vars q
+vars (Or p q)    = vars p ++ vars q
 vars (Imply p q) = vars p ++ vars q
+vars (Equiv p q) = vars p ++ vars q
 
 boolsComplex :: Int -> [[Bool]]
 boolsComplex n = map (reverse . map conv . make n . int2bin) range
@@ -337,6 +352,8 @@ sizeFolde expr = folde (const 1) (+) expr
 --   (==) (x:xs) (y:ys) = x == y && xs == ys
 --   (==) _ _           = False
 
+-- 8.
+-- Extended the tautology checker to support both logical disjuction and equivalence.
 
 -- 9.
--- Extened abstract machine to support the use of multiplication
+-- Extened abstract machine to support the use of multiplication.
