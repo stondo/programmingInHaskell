@@ -3,6 +3,18 @@ module Ch09
   , valid
   , apply
   , Expr (..)
+  , values
+  , eval
+  , subs
+  , interleave
+  , perms
+  , choices
+  , solution
+  , split
+  , exprs
+  , combine
+  , ops
+  , solutions
   ) where
 
 
@@ -53,3 +65,53 @@ eval (Val n)      = [n | n > 0]
 eval (App op l r) = [apply op n m | n <- eval l,
                                     m <- eval r,
                                     valid op n m]
+
+subs :: [a] -> [[a]]
+subs []     = [[]]
+subs (x:xs) = yss ++ map (x:) yss
+              where yss = subs xs
+
+interleave :: a -> [a] -> [[a]]
+interleave x []     = [[x]]
+interleave x (y:ys) = (x:y:ys) : map (y:) (interleave x ys)
+
+
+perms :: [a] -> [[a]]
+perms [] = [[]]
+perms (x:xs) = concat (map (interleave x) (perms xs))
+
+
+choices :: [a] -> [[a]]
+choices = concat . map perms . subs
+
+
+solution :: Expr -> [Int] -> Int -> Bool
+solution e ns n =
+  elem (values e) (choices ns) && eval e == [n]
+
+-- 9.5
+split :: [a] -> [([a],[a])]
+split []     = []
+split [_]    = []
+split (x:xs) = ([x], xs) : [(x:ls,rs) | (ls,rs) <- split xs]
+
+
+exprs :: [Int] -> [Expr]
+exprs []  = []
+exprs [n] = [Val n]
+exprs ns = [e | (ls,rs) <- split ns,
+                      l <- exprs ls,
+                      r <- exprs rs,
+                      e <- combine l r]
+
+combine :: Expr -> Expr -> [Expr]
+combine l r = [App o l r | o <- ops]
+
+
+ops :: [Op]
+ops = [Add, Sub, Mul, Div]
+
+
+solutions :: [Int] -> Int -> [Expr]
+solutions ns n =
+  [e | ns' <- choices ns, e <- exprs ns', eval e == [n]]
