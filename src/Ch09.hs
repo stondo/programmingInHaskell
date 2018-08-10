@@ -19,6 +19,7 @@ module Ch09
   , results
   , combine'
   , solutions'
+  , solutions''
   ) where
 
 
@@ -126,9 +127,9 @@ type Result = (Expr,Int)
 results :: [Int] -> [Result]
 results []  = []
 results [n] = [(Val n,n) | n > 0]
-results ns  = [res | (ls,rs) <- split ns,
-                          lx <- results ls,
-                          ry <- results rs,
+results ns  = [res | (ls,rs)  <- split ns,
+                          lx  <- results ls,
+                          ry  <- results rs,
                           res <- combine' lx ry]
 
 combine' :: Result -> Result -> [Result]
@@ -139,3 +140,28 @@ combine' (l,x) (r,y) =
 solutions' :: [Int] -> Int -> [Expr]
 solutions' ns n =
   [e | ns' <- choices ns, (e,m) <- results ns', m == n]
+
+-- 9.9 Exploiting algebraic properties
+valid' :: Op -> Int -> Int -> Bool
+valid' Add n m = n <= m
+valid' Sub n m = n > m
+valid' Mul n m = n /= 1 && m /= 1 && n <= m
+valid' Div n m = m /= 1 && n `mod` m == 0
+
+
+results' :: [Int] -> [Result]
+results' []  = []
+results' [n] = [(Val n,n) | n > 0]
+results' ns  = [res | (ls,rs)  <- split ns,
+                           lx  <- results ls,
+                           ry  <- results rs,
+                           res <- combine'' lx ry]
+
+solutions'' :: [Int] -> Int -> [Expr]
+solutions'' ns n =
+  [e | ns' <- choices ns, (e,m) <- results' ns', m == n]
+
+
+combine'' :: Result -> Result -> [Result]
+combine'' (l,x) (r,y) =
+  [(App o l r, apply o x y) | o <- ops, valid' o x y]
