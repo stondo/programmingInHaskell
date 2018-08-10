@@ -20,6 +20,7 @@ module Ch09
   , combine'
   , solutions'
   , solutions''
+  , choicesListComp
   ) where
 
 
@@ -165,3 +166,13 @@ solutions'' ns n =
 combine'' :: Result -> Result -> [Result]
 combine'' (l,x) (r,y) =
   [(App o l r, apply o x y) | o <- ops, valid' o x y]
+
+
+-- 9.11 Exercies
+
+-- 1.
+choicesListComp :: [a] -> [[a]]
+choicesListComp xs = [x' | x <- subs xs, x' <- perms x]
+
+
+-- 2.
