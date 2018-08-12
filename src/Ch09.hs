@@ -17,27 +17,40 @@ module Ch09
   , solutions
   , Result
   , results
+  , results'
   , combine'
   , solutions'
   , solutions''
   , choicesListComp
+  , countExprs
   ) where
 
 
-data Op = Add | Sub | Mul | Div
+data Op = Add | Sub | Mul | Div | Exp
 
 instance Show Op where
   show Add = "+"
   show Sub = "-"
   show Mul = "*"
   show Div = "/"
+  show Exp = "^"
 
 
 valid :: Op -> Int -> Int -> Bool
 valid Add _ _ = True
 valid Sub n m = n > m
 valid Mul _ _ = True
-valid Div n m = n `mod` m == 0
+valid Div n m = m > 0 && n `mod` m == 0
+valid Exp n m = n /=0 && m >= 0
+
+
+validExtended :: Op -> Int -> Int -> Bool
+validExtended Add _ _ = True
+validExtended Sub n m = True
+validExtended Mul _ _ = True
+validExtended Div n m | m /= 0 = n `mod` m == 0
+                      | otherwise = False
+validExtended Exp n m = m >= 0
 
 
 apply :: Op -> Int -> Int -> Int
@@ -45,6 +58,7 @@ apply Add n m = n + m
 apply Sub n m = n - m
 apply Mul n m = n * m
 apply Div n m = n `div` m
+apply Exp n m = n ^ m
 
 
 data Expr = Val Int | App Op Expr Expr
@@ -70,7 +84,8 @@ eval :: Expr -> [Int]
 eval (Val n)      = [n | n > 0]
 eval (App op l r) = [apply op n m | n <- eval l,
                                     m <- eval r,
-                                    valid op n m]
+--                                     valid op n m]
+                                    validExtended op n m]
 
 subs :: [a] -> [[a]]
 subs []     = [[]]
@@ -115,7 +130,7 @@ combine l r = [App o l r | o <- ops]
 
 
 ops :: [Op]
-ops = [Add, Sub, Mul, Div]
+ops = [Add, Sub, Mul, Div, Exp]
 
 
 solutions :: [Int] -> Int -> [Expr]
@@ -147,8 +162,8 @@ valid' :: Op -> Int -> Int -> Bool
 valid' Add n m = n <= m
 valid' Sub n m = n > m
 valid' Mul n m = n /= 1 && m /= 1 && n <= m
-valid' Div n m = m /= 1 && n `mod` m == 0
-
+valid' Div n m = m /= 0 && m /= 1 && n `mod` m == 0
+valid' Exp n m = n /= 0 && m >= 0
 
 results' :: [Int] -> [Result]
 results' []  = []
@@ -174,5 +189,16 @@ combine'' (l,x) (r,y) =
 choicesListComp :: [a] -> [[a]]
 choicesListComp xs = [x' | x <- subs xs, x' <- perms x]
 
+-- 3.
+-- increase the executon time
 
--- 2.
+-- 4 / 5 with validExtended
+countExprs :: [Int] -> (Int, Int)
+countExprs ns = (foldl (+) 0 (map (fst) ta), foldl (+) 0 (map (snd) ta))
+  where ta = [if (eval e /= []) then (1,1) else (0,1) | ns' <- choices ns, e <- exprs ns']
+
+
+-- 6.
+-- a: done.
+-- b: not done yet.
+-- c: not done yet.
