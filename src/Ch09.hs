@@ -23,17 +23,20 @@ module Ch09
   , solutions''
   , choicesListComp
   , countExprs
+  , solutionsOrClosest
+  , cntValues
   ) where
 
+import Ch01 (qsort)
 
-data Op = Add | Sub | Mul | Div | Exp
+data Op = Add | Sub | Mul | Div deriving (Eq,Ord)-- | Exp
 
 instance Show Op where
   show Add = "+"
   show Sub = "-"
   show Mul = "*"
   show Div = "/"
-  show Exp = "^"
+--   show Exp = "^"
 
 
 valid :: Op -> Int -> Int -> Bool
@@ -41,7 +44,8 @@ valid Add _ _ = True
 valid Sub n m = n > m
 valid Mul _ _ = True
 valid Div n m = m > 0 && n `mod` m == 0
-valid Exp n m = n /=0 && m >= 0
+-- valid Exp n m = n > 1 && m > 1
+-- valid Exp n m = n /=0 && m >= 0
 
 
 validExtended :: Op -> Int -> Int -> Bool
@@ -50,7 +54,8 @@ validExtended Sub n m = True
 validExtended Mul _ _ = True
 validExtended Div n m | m /= 0 = n `mod` m == 0
                       | otherwise = False
-validExtended Exp n m = m >= 0
+-- validExtended Exp n m = n > 1 && m > 1
+-- validExtended Exp n m = m >= 0
 
 
 apply :: Op -> Int -> Int -> Int
@@ -58,10 +63,10 @@ apply Add n m = n + m
 apply Sub n m = n - m
 apply Mul n m = n * m
 apply Div n m = n `div` m
-apply Exp n m = n ^ m
+-- apply Exp n m = n ^ m
 
 
-data Expr = Val Int | App Op Expr Expr
+data Expr = Val Int | App Op Expr Expr deriving (Eq,Ord)
 
 instance Show Expr where
   show (Val n) = show n
@@ -80,12 +85,17 @@ values (Val n)     = [n]
 values (App _ l r) = values l ++ values r
 
 
+cntValues :: Expr -> Int
+cntValues (Val n)     = 1
+cntValues (App _ l r) = cntValues l + cntValues r
+
+
 eval :: Expr -> [Int]
 eval (Val n)      = [n | n > 0]
 eval (App op l r) = [apply op n m | n <- eval l,
                                     m <- eval r,
---                                     valid op n m]
-                                    validExtended op n m]
+                                    valid op n m]
+--                                     validExtended op n m]
 
 subs :: [a] -> [[a]]
 subs []     = [[]]
@@ -130,7 +140,8 @@ combine l r = [App o l r | o <- ops]
 
 
 ops :: [Op]
-ops = [Add, Sub, Mul, Div, Exp]
+ops = [Add, Sub, Mul, Div]
+-- ops = [Add, Sub, Mul, Div, Exp]
 
 
 solutions :: [Int] -> Int -> [Expr]
@@ -163,7 +174,8 @@ valid' Add n m = n <= m
 valid' Sub n m = n > m
 valid' Mul n m = n /= 1 && m /= 1 && n <= m
 valid' Div n m = m /= 0 && m /= 1 && n `mod` m == 0
-valid' Exp n m = n /= 0 && m >= 0
+-- valid' Exp n m = n > 1 && m > 1
+-- valid' Exp n m = n /= 0 && m >= 0
 
 results' :: [Int] -> [Result]
 results' []  = []
@@ -175,11 +187,13 @@ results' ns  = [res | (ls,rs)  <- split ns,
 
 solutions'' :: [Int] -> Int -> [Expr]
 solutions'' ns n =
-  [e | ns' <- choices ns, (e,m) <- results' ns', m == n]
+  map (snd) (qsort[(cntValues e, e) | ns' <- choices ns, (e,m) <- results' ns', m == n])
+--   [e | ns' <- choices ns, (e,m) <- results' ns', m == n]
 
 
 combine'' :: Result -> Result -> [Result]
 combine'' (l,x) (r,y) =
+--   [(App o l r, apply o x y) | o <- ops, valid o x y]
   [(App o l r, apply o x y) | o <- ops, valid' o x y]
 
 
@@ -199,6 +213,11 @@ countExprs ns = (foldl (+) 0 (map (fst) ta), foldl (+) 0 (map (snd) ta))
 
 
 -- 6.
--- a: done.
--- b: not done yet.
--- c: not done yet.
+-- a. done.
+
+-- b.
+solutionsOrClosest :: [Int] -> Int -> Int -> [Expr]
+solutionsOrClosest ns n diff = if (not (null sltns)) then sltns else [e | ns' <- choices ns, (e,m) <- results' ns', abs (n - m) == diff]
+  where sltns = [e | ns' <- choices ns, (e,m) <- results' ns', m == n]
+
+-- c. done.
