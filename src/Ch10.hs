@@ -16,6 +16,10 @@ module Ch10
   , newline
   , playNim
   , nim
+  , cls
+  , Pos
+  , writeAt
+  , goto
   ) where
 
 import System.IO (hSetEcho, stdin)
@@ -52,8 +56,8 @@ strLen = do putStr' "Enter a string: "
             putStr' (show (length xs))
             putStrLn' " characters"
 
--- 10.6
 
+-- 10.6 Hangman
 hangman :: IO ()
 hangman = do putStrLn' "Think of a word:"
              word <- sgetLine
@@ -89,23 +93,23 @@ play word = do putStr' "? "
 match :: String -> String -> String
 match xs ys = [if elem x ys then x else '-' | x <- xs]
 
--- 10.7
+-- 10.7 Nim
 next :: Int -> Int
 next 1 = 2
 next 2 = 1
 
-type Board = [Int]
+type NimBoard = [Int]
 
-initial :: Board
+initial :: NimBoard
 initial = [5,4,3,2,1]
 
-finished :: Board -> Bool
+finished :: NimBoard -> Bool
 finished = all (== 0)
 
-valid :: Board -> Int -> Int -> Bool
+valid :: NimBoard -> Int -> Int -> Bool
 valid board row num = board !! (row - 1) >= num
 
-move :: Board -> Int -> Int -> Board
+move :: NimBoard -> Int -> Int -> NimBoard
 move board row num = [update r n | (r,n) <- zip [1..] board]
   where update r n = if r == row then n - num else n
 
@@ -114,7 +118,7 @@ putRow row num = do putStr (show row)
                     putStr ": "
                     putStrLn (concat (replicate num "* "))
 
-putBoard :: Board -> IO ()
+putBoard :: NimBoard -> IO ()
 putBoard [a,b,c,d,e] = do putRow 1 a
                           putRow 2 b
                           putRow 3 c
@@ -135,7 +139,7 @@ newline :: IO ()
 newline = putChar '\n'
 
 
-playNim :: Board -> Int -> IO ()
+playNim :: NimBoard -> Int -> IO ()
 playNim board player =
    do newline
       putBoard board
@@ -159,3 +163,57 @@ playNim board player =
 
 nim :: IO ()
 nim = playNim initial 1
+
+
+-- 10.8 Game of Life
+cls :: IO ()
+cls = putStr' "\ESC[2J"
+
+
+type Pos = (Int,Int)
+
+
+writeAt :: Pos -> String -> IO ()
+writeAt p xs = do goto p
+                  putStr xs
+
+
+goto :: Pos -> IO ()
+goto (x,y) = putStr' ("\ESC[" ++ show y ++ ";" ++ show x ++ "H")
+
+
+width :: Int
+width = 10
+
+
+height :: Int
+height = 10
+
+
+type GoLBoard = [Pos]
+
+
+glider :: GoLBoard
+glider = [(4,2), (2,3), (4,3), (3,4), (4,4)]
+
+
+showcells :: GoLBoard -> IO ()
+showcells b = sequence_ [writeAt p "0" | p <- b]
+
+
+isAlive :: GoLBoard -> Pos -> Bool
+isAlive b p = elem p b
+
+
+isEmpty :: GoLBoard -> Pos -> Bool
+isEmpty b p = not (isAlive b p)
+
+
+neighbs :: Pos -> [Pos]
+neighbs (x,y) = map wrap [(x - 1,y - 1), (x, y - 1),
+                          (x + 1, y - 1), (x - 1, y),
+                          (x + 1, y), (x - 1, y + 1),
+                          (x, y + 1), (x + 1, y + 1)]
+
+wrap :: Pos -> Pos
+wrap (x,y) = (((x - 1) `mod` width) + 1, ((y - 1) `mod` height) + 1)
