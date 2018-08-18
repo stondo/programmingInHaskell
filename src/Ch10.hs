@@ -20,10 +20,26 @@ module Ch10
   , Pos
   , writeAt
   , goto
+  , width
+  , height
+  , GoLBoard
+  , glider
+  , showCells
+  , isEmpty
+  , neighbs
+  , wrap
+  , liveNeighbs
+  , survivors
+  , births
+  , nextGen
+  , life
+  , wait
+  , expOne
   ) where
 
 import System.IO (hSetEcho, stdin)
 import Data.Char (digitToInt, isDigit)
+import Ch07 (rmdups)
 
 
 act :: IO (Char,Char)
@@ -183,11 +199,11 @@ goto (x,y) = putStr' ("\ESC[" ++ show y ++ ";" ++ show x ++ "H")
 
 
 width :: Int
-width = 10
+width = 20
 
 
 height :: Int
-height = 10
+height = 20
 
 
 type GoLBoard = [Pos]
@@ -197,8 +213,12 @@ glider :: GoLBoard
 glider = [(4,2), (2,3), (4,3), (3,4), (4,4)]
 
 
-showcells :: GoLBoard -> IO ()
-showcells b = sequence_ [writeAt p "0" | p <- b]
+expOne :: GoLBoard
+expOne = [(1,1), (1,2), (1,3), (1,4), (2,1)]
+
+
+showCells :: GoLBoard -> IO ()
+showCells b = sequence_ [writeAt p "0" | p <- b]
 
 
 isAlive :: GoLBoard -> Pos -> Bool
@@ -216,4 +236,40 @@ neighbs (x,y) = map wrap [(x - 1,y - 1), (x, y - 1),
                           (x, y + 1), (x + 1, y + 1)]
 
 wrap :: Pos -> Pos
-wrap (x,y) = (((x - 1) `mod` width) + 1, ((y - 1) `mod` height) + 1)
+wrap (x,y) = (((x - 1) `mod` width) + 1,
+              ((y - 1) `mod` height) + 1)
+
+
+liveNeighbs :: GoLBoard -> Pos -> Int
+liveNeighbs b = length . filter (isAlive b) . neighbs
+
+
+survivors :: GoLBoard -> [Pos]
+survivors b = [p | p <- b, elem (liveNeighbs b p) [2,3]]
+
+-- checks every position of the GoLBoard
+-- births :: GoLBoard -> [Pos]
+-- births b = [(x,y | x <- [1..width],
+--                         [1..height,
+--                         isEmpty b (x,y),
+--                         liveNeighbs b (x,y) == 3])]
+
+
+births :: GoLBoard -> [Pos]
+births b = [p | p <- rmdups (concat (map neighbs b)),
+           isEmpty b p,
+           liveNeighbs b p == 3]
+
+
+nextGen :: GoLBoard -> GoLBoard
+nextGen b = survivors b ++ births b
+
+
+life :: GoLBoard -> IO ()
+life b = do cls
+            showCells b
+            wait 500000
+            life (nextGen b)
+
+wait :: Int -> IO ()
+wait n = sequence_ [return () | _ <- [1..n]]
