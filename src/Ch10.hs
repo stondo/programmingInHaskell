@@ -35,6 +35,9 @@ module Ch10
   , life
   , wait
   , expOne
+  , putStr''
+  , putBoard'
+  , putBoard''
   ) where
 
 import System.IO (hSetEcho, stdin)
@@ -273,3 +276,20 @@ life b = do cls
 
 wait :: Int -> IO ()
 wait n = sequence_ [return () | _ <- [1..n]]
+
+-- 10.10 Exercises
+
+-- 1.
+putStr'' :: String -> IO ()
+putStr'' s = sequence_ [putChar c | c <- s]
+
+-- 2.
+putBoard' :: NimBoard -> IO ()
+putBoard' (x:xs) = writeRow 1 (x:xs)
+  where writeRow c (y:ys) | not (null ys) = do putRow c y
+                                               writeRow (c+1) ys
+                          | otherwise = putRow c y
+
+-- 3.
+putBoard'' :: NimBoard -> IO ()
+putBoard'' xs = sequence_ [putRow cnt x | (x,cnt) <- xs `zip` [1..]]
