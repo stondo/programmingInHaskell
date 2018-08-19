@@ -38,6 +38,7 @@ module Ch10
   , putStr''
   , putBoard'
   , putBoard''
+  , adder
   ) where
 
 import System.IO (hSetEcho, stdin)
@@ -293,3 +294,20 @@ putBoard' (x:xs) = writeRow 1 (x:xs)
 -- 3.
 putBoard'' :: NimBoard -> IO ()
 putBoard'' xs = sequence_ [putRow cnt x | (x,cnt) <- xs `zip` [1..]]
+
+
+-- 4.
+adder :: IO ()
+adder = do lines <- getDigit "How many numbers? "
+           if lines == 0 then
+              do putStr "The result is: "
+                 putStrLn "0"
+           else
+              do res <- sumDigit 0 lines
+                 putStr "The result is: "
+                 putStrLn (show res)
+  where sumDigit acc l = do x <- getDigit ""
+                            if l == 1 then
+                               return (acc + x)
+                            else
+                               sumDigit (acc + x) (l - 1)
