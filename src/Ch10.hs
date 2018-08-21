@@ -5,6 +5,8 @@ module Ch10
   , putStrLn'
   , strLen
   , hangman
+  , sgetLine
+  , getCh
   , next
   , initial
   , finished
@@ -39,7 +41,10 @@ module Ch10
   , putBoard'
   , putBoard''
   , adder
+  , adder'
+  , readLine
   ) where
+
 
 import System.IO (hSetEcho, stdin)
 import Data.Char (digitToInt, isDigit)
@@ -311,3 +316,28 @@ adder = do lines <- getDigit "How many numbers? "
                                return (acc + x)
                             else
                                sumDigit (acc + x) (l - 1)
+
+-- 5.
+adder' :: IO Int
+adder' = do lines <- getDigit "How many numbers? "
+            let nums = sequence [getDigit "" | l <- [lines, lines - 1..1]]
+            sumIoInt 0 nums
+  where sumIoInt acc ints = do (x:xs) <- ints
+                               if null xs then
+                                  return (acc + x)
+                               else
+                                  sumIoInt (acc + x) (return xs)
+
+-- 6.
+readLine :: IO String
+readLine = buildStr []
+  where buildStr cs = do c <- getCh
+                         if c == '\n' then
+                            return cs
+                         else if c == '\DEL' then
+                            if length cs > 0 then
+                               buildStr (init cs)
+                             else
+                               buildStr []
+                         else
+                            buildStr (cs ++ [c])
