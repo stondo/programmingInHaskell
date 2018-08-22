@@ -29,13 +29,18 @@ module Ch11
   , minimax
   , bestmove
   , playTicTacToe
+  , countGameTreeNodes
+  , depthOfGameTree
   ) where
 
 import Data.Char
 import Data.List
 import System.IO
+import System.Random (randomRIO)
+import System.IO.Unsafe (unsafePerformIO)
 
 import Ch10 (cls, goto)
+
 
 -- 11.2 Basic declarations
 size :: Int
@@ -179,11 +184,17 @@ minimax (GameNode g ts)
                       ps  = [p | GameNode (_,p) _ <- ts']
 
 
+-- bestmove :: Grid -> Player -> Grid
+-- bestmove g p = head [g' | GameNode (g',p') _ <- ts, p' == best]
+--                where
+--                   tree = prune depth (gametree g p)
+--                   GameNode (_,best) ts = minimax tree
 bestmove :: Grid -> Player -> Grid
-bestmove g p = head [g' | GameNode (g',p') _ <- ts, p' == best]
+bestmove g p = bests !! unsafePerformIO (randomRIO (0,(length bests)-1))
                where
                   tree = prune depth (gametree g p)
                   GameNode (_,best) ts = minimax tree
+                  bests = [g' | GameNode (g',p') _ <- ts, p' == best]
 
 
 -- 11.11 Human vs computer
@@ -206,3 +217,21 @@ playTicTacToe' g p
                       [g'] -> playTicTacToe g' (next p)
    | p == X   = do putStr "Player X is thinking... "
                    (playTicTacToe $! (bestmove g p)) (next p)
+
+
+-- 11.13 Exercises
+
+-- 1.
+-- data GameTree a = GameNode a [GameTree a] deriving (Show)
+countGameTreeNodes :: GameTree Grid -> Int
+countGameTreeNodes (GameNode g []) = 1
+countGameTreeNodes (GameNode g ts) = 1 + sum [countGameTreeNodes t | t <- ts]
+
+
+depthOfGameTree :: GameTree Grid -> Int
+depthOfGameTree (GameNode g []) = 1
+depthOfGameTree (GameNode g ts) = 1 + depthOfGameTree (ts !! (length ts `div` 2))
+
+
+-- 2.
+-- See bestmove above.
