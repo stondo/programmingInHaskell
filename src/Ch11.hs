@@ -21,6 +21,14 @@ module Ch11
   , run
   , run'
   , prompt
+  , GameTree
+  , gametree
+  , moves
+  , prune
+  , depth
+  , minimax
+  , bestmove
+  , playTicTacToe
   ) where
 
 import Data.Char
@@ -133,3 +141,68 @@ run' g p | wins O g = putStrLn "Player O wins!\n"
 
 prompt :: Player -> String
 prompt p = "Player " ++ show p ++ ", enter your move: "
+
+-- 11.8 Game trees
+data GameTree a = GameNode a [GameTree a] deriving (Show)
+
+gametree :: Grid -> Player -> GameTree Grid
+gametree g p = GameNode g [gametree g' (next p) | g' <- moves g p]
+
+-- gametree g p = Node g [gametree g' (next p) | g' <- moves g p]
+
+moves :: Grid -> Player -> [Grid]
+moves g p
+   | won g = []
+   | full g = []
+   | otherwise = concat [move g i p | i <- [0..((size^2)-1)]]
+
+-- 11.9 Pruning the tree
+prune :: Int -> GameTree a -> GameTree a
+prune 0 (GameNode x _) = GameNode x []
+prune n (GameNode x ts) = GameNode x [prune (n-1) t | t <- ts]
+
+depth :: Int
+depth = 9
+
+
+-- 11.10 Minimax algorithm
+minimax :: GameTree Grid -> GameTree (Grid,Player)
+minimax (GameNode g [])
+   | wins O g  = GameNode (g, O) []
+   | wins X g  = GameNode (g, X) []
+   | otherwise = GameNode (g, B) []
+minimax (GameNode g ts)
+   | turn g == O = GameNode (g, minimum ps) ts'
+   | turn g == X = GameNode (g, maximum ps) ts'
+                   where
+                      ts' = map minimax ts
+                      ps  = [p | GameNode (_,p) _ <- ts']
+
+
+bestmove :: Grid -> Player -> Grid
+bestmove g p = head [g' | GameNode (g',p') _ <- ts, p' == best]
+               where
+                  tree = prune depth (gametree g p)
+                  GameNode (_,best) ts = minimax tree
+
+
+-- 11.11 Human vs computer
+playTicTacToe :: Grid -> Player -> IO ()
+playTicTacToe g p = do cls
+                       goto (1,1)
+                       putGrid g
+                       playTicTacToe' g p
+
+-- The perator $! is used to force the evaluation of the bestmove for the computer player prior to the function play being invoked.
+playTicTacToe' :: Grid -> Player -> IO ()
+playTicTacToe' g p
+   | wins O g = putStrLn "Player O wins!\n"
+   | wins X g = putStrLn "Player X wins!\n"
+   | full g   = putStrLn "It's a draw!\n"
+   | p == O   = do i <- getNat (prompt p)
+                   case move g i p of
+                      [] -> do putStrLn "ERROR: Invalid move"
+                               playTicTacToe' g p
+                      [g'] -> playTicTacToe g' (next p)
+   | p == X   = do putStr "Player X is thinking... "
+                   (playTicTacToe $! (bestmove g p)) (next p)
