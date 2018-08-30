@@ -31,6 +31,7 @@ module Ch11
   , playTicTacToe
   , countGameTreeNodes
   , depthOfGameTree
+  , depthOfGameTreeGridPLayer
   ) where
 
 import Data.Char
@@ -191,23 +192,24 @@ minimax (GameNode g ts)
 --                   tree = prune depth (gametree g p)
 --                   GameNode (_,best) ts = minimax tree
 
--- bestmove that randomly selects one of the best moves available
--- bestmove :: Grid -> Player -> Grid
--- bestmove g p = bests !! unsafePerformIO (randomRIO (0,(length bests)-1))
---                where
---                   tree = prune depth (gametree g p)
---                   GameNode (_,best) ts = minimax tree
---                   bests = [g' | GameNode (g',p') _ <- ts, p' == best]
 
--- TODO index of minimum
+-- bestmove that randomly selects one of the best moves available
+--bestmove :: Grid -> Player -> Grid
+--bestmove g p = bests !! unsafePerformIO (randomRIO (0,(length bests)-1))
+--               where
+--                  tree = prune depth (gametree g p)
+--                  GameNode (_,best) ts = minimax tree
+--                  bests = [g' | GameNode (g',p') _ <- ts, p' == best]
+
+
 -- bestmove that selects the move that leads to the quickest path to a win
 bestmove :: Grid -> Player -> Grid
 bestmove g p = fst (head quickest)
                where
                   tree = prune depth (gametree g p)
-                  (GameNode (_, best) tss, d) = (minimax tree, depthOfGameTree tree)
-                  quickest = sortBy (compare `on` snd) (GameNode (_, best) tss, d)
---                   quickest = sortBy (compare `on` snd) [(g',depthOfGameTree (gametree g'' p'')) | GameNode (g',p') ts <- tss,  GameNode (g'',p'') _ <- ts, p' == best]
+                  GameNode (_, best) tss = minimax tree
+                  bests = [(g', minimum [depthOfGameTreeGridPLayer t | t <- ts]) | GameNode (g',p') ts <- tss, p' == best]
+                  quickest = sortBy (compare `on` snd) bests
 
 
 -- 11.11 Human vs computer
@@ -246,8 +248,13 @@ depthOfGameTree (GameNode g []) = 0
 depthOfGameTree (GameNode g ts) = 1 + maximum [depthOfGameTree t | t <- ts]
 -- depthOfGameTree (GameNode g ts) = 1 + depthOfGameTree (ts !! (length ts `div` 2))
 
+depthOfGameTreeGridPLayer :: GameTree (Grid,Player)-> Int
+depthOfGameTreeGridPLayer (GameNode (g,_) []) = 0
+depthOfGameTreeGridPLayer (GameNode (g,_) ts) = 1 + maximum [depthOfGameTreeGridPLayer t | t <- ts]
+
 
 -- 2.
 -- See bestmove above.
 
 -- 3.
+-- See bestmove above.
