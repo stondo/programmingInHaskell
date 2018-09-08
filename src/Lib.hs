@@ -8,7 +8,7 @@ import System.IO
 
 someFunc :: IO ()
 someFunc = do hSetBuffering stdout NoBuffering
-              playTicTacToe empty O
+              playTicTacToe empty O ""
 -- someFunc = print (countExprs [1,3,7,10,25,50])
 -- someFunc = print (solutionsOrClosest [1,3,7,10,25,50] 831 1)
 -- someFunc = print (length (solutionsOrClosest [1,3,7,10,25,50] 831) 1)

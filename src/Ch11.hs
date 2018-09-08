@@ -41,7 +41,7 @@ import System.IO
 import System.Random (randomRIO)
 import System.IO.Unsafe (unsafePerformIO)
 
-import Ch10 (cls, goto)
+import Ch10 (cls, goto, getCh)
 
 
 -- 11.2 Basic declarations
@@ -194,8 +194,8 @@ minimax (GameNode g ts)
 
 
 -- bestmove that randomly selects one of the best moves available
---bestmove :: Grid -> Player -> Grid
---bestmove g p = bests !! unsafePerformIO (randomRIO (0,(length bests)-1))
+-- bestmove :: Grid -> Player -> Grid
+-- bestmove g p = bests !! unsafePerformIO (randomRIO (0,(length bests)-1))
 --               where
 --                  tree = prune depth (gametree g p)
 --                  GameNode (_,best) ts = minimax tree
@@ -213,26 +213,51 @@ bestmove g p = fst (head quickest)
 
 
 -- 11.11 Human vs computer
-playTicTacToe :: Grid -> Player -> IO ()
-playTicTacToe g p = do cls
-                       goto (1,1)
-                       putGrid g
-                       playTicTacToe' g p
+playTicTacToe :: Grid -> Player -> String -> IO ()
+playTicTacToe g p f = do cls
+                         goto (1,1)
+                         putGrid g
+                         playTicTacToe' g p f
 
--- The perator $! is used to force the evaluation of the bestmove for the computer player prior to the function play being invoked.
-playTicTacToe' :: Grid -> Player -> IO ()
-playTicTacToe' g p
+-- The operator $! is used to force the evaluation of the bestmove for the computer player prior to the function play being invoked.
+-- playTicTacToe' :: Grid -> Player -> IO ()
+-- playTicTacToe' g p
+--    | wins O g = putStrLn "Player O wins!\n"
+--    | wins X g = putStrLn "Player X wins!\n"
+--    | full g   = putStrLn "It's a draw!\n"
+--    | p == O   = do i <- getNat (prompt p)
+--                    case move g i p of
+--                       [] -> do putStrLn "ERROR: Invalid move"
+--                                playTicTacToe' g p
+--                       [g'] -> playTicTacToe g' (next p)
+--    | p == X   = do putStr "Player X is thinking... "
+--                    (playTicTacToe $! (bestmove g p)) (next p)
+
+
+-- ticatactoe version that
+playTicTacToe' :: Grid -> Player -> String -> IO ()
+playTicTacToe' g p f
+   | g == empty && f == "" = do putStr "Do you want to play first? (valid answer: y or n) "
+                                do x <- getChar
+                                   if x == 'y' then
+                                      playHuman
+                                   else if x == 'n' then
+                                      playCpu
+                                   else
+                                      do putStrLn "ERROR: Invalid answer"
+                                         playTicTacToe g p ""
    | wins O g = putStrLn "Player O wins!\n"
    | wins X g = putStrLn "Player X wins!\n"
    | full g   = putStrLn "It's a draw!\n"
-   | p == O   = do i <- getNat (prompt p)
-                   case move g i p of
-                      [] -> do putStrLn "ERROR: Invalid move"
-                               playTicTacToe' g p
-                      [g'] -> playTicTacToe g' (next p)
-   | p == X   = do putStr "Player X is thinking... "
-                   (playTicTacToe $! (bestmove g p)) (next p)
-
+   | p == O   = if f == "cpu" then playHuman else playCpu
+   | p == X   = if f == "human" then playCpu else playHuman
+   where playHuman = do i <- getNat (prompt p)
+                        case move g i p of
+                          [] -> do putStrLn "ERROR: Invalid move"
+                                   playTicTacToe' g p "human"
+                          [g'] -> playTicTacToe g' (next p) "human"
+         playCpu   = do putStr ("Player " ++ (show p) ++ " is thinking... ")
+                        (playTicTacToe $! (bestmove g p)) (next p) "cpu"
 
 -- 11.13 Exercises
 
@@ -258,3 +283,6 @@ depthOfGameTreeGridPLayer (GameNode (g,_) ts) = 1 + maximum [depthOfGameTreeGrid
 
 -- 3.
 -- See bestmove above.
+
+-- 4.
+-- a.
