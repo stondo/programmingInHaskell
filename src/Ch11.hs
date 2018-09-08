@@ -285,4 +285,4 @@ depthOfGameTreeGridPLayer (GameNode (g,_) ts) = 1 + maximum [depthOfGameTreeGrid
 -- See bestmove above.
 
 -- 4.
--- a.
+-- a. done
