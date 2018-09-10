@@ -234,7 +234,7 @@ playTicTacToe g p f = do cls
 --                    (playTicTacToe $! (bestmove g p)) (next p)
 
 
--- ticatactoe version that
+-- ticatactoe version that lets you decide to play first or second.
 playTicTacToe' :: Grid -> Player -> String -> IO ()
 playTicTacToe' g p f
    | g == empty && f == "" = do putStr "Do you want to play first? (valid answer: y or n) "
@@ -286,3 +286,6 @@ depthOfGameTreeGridPLayer (GameNode (g,_) ts) = 1 + maximum [depthOfGameTreeGrid
 
 -- 4.
 -- a. done
+-- b.
+-- c.
+-- d.
