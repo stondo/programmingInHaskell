@@ -208,7 +208,7 @@ bestmove g p = fst (head quickest)
                where
                   tree = prune depth (gametree g p)
                   GameNode (_, best) tss = minimax tree
-                  bests = [(g', minimum [depthOfGameTreeGridPLayer t | t <- ts]) | GameNode (g',p') ts <- tss, p' == best]
+                  bests = [(g', minimum [depthOfGameTreeGridPlayer t | t <- ts]) | GameNode (g',p') ts <- tss, p' == best]
                   quickest = sortBy (compare `on` snd) bests
 
 
@@ -273,9 +273,9 @@ depthOfGameTree (GameNode g []) = 0
 depthOfGameTree (GameNode g ts) = 1 + maximum [depthOfGameTree t | t <- ts]
 -- depthOfGameTree (GameNode g ts) = 1 + depthOfGameTree (ts !! (length ts `div` 2))
 
-depthOfGameTreeGridPLayer :: GameTree (Grid,Player)-> Int
-depthOfGameTreeGridPLayer (GameNode (g,_) []) = 0
-depthOfGameTreeGridPLayer (GameNode (g,_) ts) = 1 + maximum [depthOfGameTreeGridPLayer t | t <- ts]
+depthOfGameTreeGridPlayer :: GameTree (Grid,Player)-> Int
+depthOfGameTreeGridPlayer (GameNode (g,_) []) = 0
+depthOfGameTreeGridPlayer (GameNode (g,_) ts) = 1 + maximum [depthOfGameTreeGridPlayer t | t <- ts]
 
 
 -- 2.
@@ -285,7 +285,12 @@ depthOfGameTreeGridPLayer (GameNode (g,_) ts) = 1 + maximum [depthOfGameTreeGrid
 -- See bestmove above.
 
 -- 4.
+
 -- a. done
+
 -- b.
+
 -- c.
+
 -- d.
+
