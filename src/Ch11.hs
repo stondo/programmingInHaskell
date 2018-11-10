@@ -31,7 +31,7 @@ module Ch11
   , playTicTacToe
   , countGameTreeNodes
   , depthOfGameTree
-  , depthOfGameTreeGridPLayer
+  , depthOfGameTreeGridPlayer
   ) where
 
 import Data.Char
